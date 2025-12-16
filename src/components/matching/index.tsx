@@ -3,10 +3,10 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 // 컴포넌트들
 import { Step1NamePhone, Step1Data } from './steps/Step1NamePhone';
 import { Step2Age } from './steps/Step2Age';
-import { Step2ConcernSelection } from './steps/Step2Concern';
-import { Step3Question, Step3Data } from './steps/Step3Question';
-import { Step4Analysis } from './steps/Step4Analysis';
-import { Step5Result } from './steps/Step5Result';
+import { Step3ConcernSelection } from './steps/Step3Concern';
+import { Step4Question, Step4Data } from './steps/Step4Question';
+import { Step5Analysis } from './steps/Step5Analysis';
+import { Step6Result } from './steps/Step6Result';
 
 export interface MatchingData {
     name: string;
@@ -85,8 +85,8 @@ export const AiMatchingSystem: React.FC = () => {
     };
 
     // STEP 4 완료 -> 분석(5)으로 이동
-    const handleStep4Next = (step3Data: Step3Data) => {
-        setData((prev) => ({ ...prev, ...step3Data }));
+    const handleStep4Next = (step4Data: Step4Data) => {
+        setData((prev) => ({ ...prev, ...step4Data }));
         setStep(5);
         handleScroll();
     };
@@ -152,7 +152,7 @@ export const AiMatchingSystem: React.FC = () => {
                 )}
 
                 {step === 3 && (
-                    <Step2ConcernSelection
+                    <Step3ConcernSelection
                         selectedTags={data.selectedTags}
                         onToggleTag={handleToggleTag}
                         onNext={handleStep3Next}
@@ -160,21 +160,21 @@ export const AiMatchingSystem: React.FC = () => {
                 )}
 
                 {step === 4 && (
-                    <Step3Question
+                    <Step4Question
                         onNext={handleStep4Next}
                         defaultValues={{ hasContouringExp: data.hasContouringExp, priority: data.priority }}
                     />
                 )}
 
                 {step === 5 && (
-                    <Step4Analysis
+                    <Step5Analysis
                         userName={data.name}
                         onNext={handleStep5Next}
                     />
                 )}
 
                 {step === 6 && (
-                    <Step5Result
+                    <Step6Result
                         userData={data}
                         onRestart={handleRestart}
                     />

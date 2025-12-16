@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Check, AlertCircle } from 'lucide-react';
 
-export interface Step3Data {
+export interface Step4Data {
     hasContouringExp: boolean | null; // true: 경험있음, false: 없음
     priority: string; // 우선순위 선택값
 }
 
 interface Props {
-    onNext: (data: Step3Data) => void;
-    defaultValues?: Partial<Step3Data>;
+    onNext: (data: Step4Data) => void;
+    defaultValues?: Partial<Step4Data>;
 }
 
 const PRIORITIES = [
@@ -19,7 +19,7 @@ const PRIORITIES = [
     '의료진의 경험과 실력',
 ];
 
-export const Step3Question: React.FC<Props> = ({ onNext, defaultValues }) => {
+export const Step4Question: React.FC<Props> = ({ onNext, defaultValues }) => {
     const [hasContouringExp, setHasContouringExp] = useState<boolean | null>(defaultValues?.hasContouringExp ?? null);
     const [priority, setPriority] = useState<string>(defaultValues?.priority || '');
 
@@ -33,12 +33,24 @@ export const Step3Question: React.FC<Props> = ({ onNext, defaultValues }) => {
 
     return (
         <div className="w-full max-w-xl mx-auto animate-fadeIn">
-            <div className="text-center mb-10 space-y-2">
+            {/* 헤더 개선: 뱃지 추가 */}
+            <div className="text-center mb-10 space-y-4">
+                {/* 신뢰 뱃지 */}
+                <div className="flex items-center justify-center gap-2 mb-2">
+                    <div className="px-3 py-1 bg-green-50 border border-green-200 rounded-full text-xs font-bold text-green-700 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                        실시간 AI 분석
+                    </div>
+                    <div className="px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-xs font-bold text-blue-700">
+                        STEP 4 OF 5
+                    </div>
+                </div>
+
                 <h3 className="text-xl md:text-2xl font-bold text-slate-900">
                     마지막으로 <br className="md:hidden" />
-                    <span className="text-blue-600">두 가지만 더 확인해주세요</span>
+                    <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">두 가지만 더 확인해주세요</span>
                 </h3>
-                <p className="text-slate-500 text-sm">
+                <p className="text-slate-500 text-sm max-w-md mx-auto">
                     과거 시술 이력을 알면 더 정확한 예측이 가능합니다.
                 </p>
             </div>
@@ -105,23 +117,23 @@ export const Step3Question: React.FC<Props> = ({ onNext, defaultValues }) => {
                                 key={item}
                                 onClick={() => setPriority(item)}
                                 className={`
-                                    w-full text-left px-6 py-5 rounded-2xl border-2 transition-all flex items-center justify-between gap-4 group
+                                    w-full text-left px-5 py-4 rounded-2xl border-2 transition-all flex items-center gap-3 group
                                     ${priority === item
                                         ? 'border-blue-500 bg-blue-50 text-blue-900 font-bold shadow-md'
                                         : 'border-slate-100 bg-white text-slate-500 hover:border-blue-200 hover:bg-slate-50'
                                     }
                                 `}
                             >
-                                <span className="break-keep leading-snug">{item}</span>
                                 <div className={`
-                                    flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center border transition-all
+                                    shrink-0 w-5 h-5 rounded-full flex items-center justify-center border transition-all
                                     ${priority === item
                                         ? 'bg-blue-500 border-blue-500 text-white'
                                         : 'bg-slate-100 border-slate-200 text-transparent group-hover:border-blue-200'
                                     }
                                 `}>
-                                    <Check className="w-3.5 h-3.5" strokeWidth={3} />
+                                    <Check className="w-3 h-3" strokeWidth={3} />
                                 </div>
+                                <span className="break-keep leading-snug flex-1">{item}</span>
                             </button>
                         ))}
                     </div>
@@ -129,19 +141,22 @@ export const Step3Question: React.FC<Props> = ({ onNext, defaultValues }) => {
             </div>
 
             {/* 다음 단계 버튼 */}
-            <div className="pt-10 flex justify-center">
+            <div className="pt-16 flex justify-center">
                 <button
                     onClick={handleSubmit}
                     disabled={!isValid}
                     className={`
-                        w-full py-4 rounded-full font-bold text-lg transition-all shadow-lg
+                        w-full py-4 rounded-full font-bold text-lg transition-all shadow-lg flex items-center justify-center gap-2 relative overflow-hidden group
                         ${isValid
-                            ? 'bg-slate-900 text-white hover:bg-slate-800 hover:shadow-xl transform hover:-translate-y-1'
-                            : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                            ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white hover:shadow-2xl hover:scale-105 transform'
+                            : 'bg-slate-100 text-slate-400 border-2 border-slate-200 cursor-not-allowed'
                         }
                     `}
                 >
-                    내 맞춤 결과 분석하기
+                    {isValid && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    )}
+                    <span className="relative z-10">내 맞춤 결과 분석하기</span>
                 </button>
             </div>
         </div>

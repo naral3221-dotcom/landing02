@@ -16,10 +16,14 @@ export const Hero = ({ onScrollToForm }: HeroProps) => {
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Water Ripple Background Image */}
         <div className="absolute inset-0 z-0">
-          {/* Primary Water Texture */}
+          {/* Primary Water Texture - Optimized with placeholder */}
+          <div className="absolute inset-0 bg-blue-50 animate-pulse" />
           <img
             src={waterBg}
             alt="Water Ripple Background"
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
             className="absolute inset-0 w-full h-full object-cover opacity-50 scale-110 animate-[pulse_8s_ease-in-out_infinite]"
             style={{ filter: 'contrast(1.1) brightness(1.1)' }}
           />
@@ -97,10 +101,14 @@ export const Hero = ({ onScrollToForm }: HeroProps) => {
               />
             </svg>
 
-            {/* Image */}
+            {/* Image - Optimized with blur placeholder */}
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-cyan-50" />
             <img
               src={modelImage}
               alt="Balance Lab Model"
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
               className="relative w-full h-full object-cover object-center scale-105 group-hover:scale-110 transition-transform duration-1000"
             />
 

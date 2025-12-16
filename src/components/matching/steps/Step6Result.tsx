@@ -21,7 +21,7 @@ interface Props {
     onRestart: () => void;
 }
 
-export const Step5Result: React.FC<Props> = ({ userData, onRestart }) => {
+export const Step6Result: React.FC<Props> = ({ userData, onRestart }) => {
 
     const matchedReviews = useMemo(() => {
         // REVIEWS가 undefined일 경우를 대비한 안전장치
@@ -116,7 +116,7 @@ export const Step5Result: React.FC<Props> = ({ userData, onRestart }) => {
                             </div>
 
                             <div className="p-6 md:p-8">
-                                <ReviewContentRenderer content={review.content} />
+                                <ReviewContentRenderer content={review.content} isFirstReview={index === 0} />
                             </div>
 
                             <div className="bg-slate-50 px-6 py-4 border-t border-slate-100 text-center">

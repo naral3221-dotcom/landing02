@@ -6,7 +6,7 @@ interface Props {
     onNext: () => void; // 최종 결과 페이지로 이동
 }
 
-export const Step4Analysis: React.FC<Props> = ({ userName, onNext }) => {
+export const Step5Analysis: React.FC<Props> = ({ userName, onNext }) => {
     const [progress, setProgress] = useState(0);
     const [loadingStep, setLoadingStep] = useState(0);
     const [isAgreed, setIsAgreed] = useState(false);
@@ -51,9 +51,20 @@ export const Step4Analysis: React.FC<Props> = ({ userName, onNext }) => {
     if (progress < 100) {
         return (
             <div className="w-full max-w-xl mx-auto py-12 flex flex-col items-center justify-center animate-fadeIn">
+                {/* 신뢰 뱃지 */}
+                <div className="flex items-center justify-center gap-2 mb-8">
+                    <div className="px-3 py-1 bg-green-50 border border-green-200 rounded-full text-xs font-bold text-green-700 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                        AI 분석 진행중
+                    </div>
+                    <div className="px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-xs font-bold text-blue-700">
+                        STEP 5 OF 5
+                    </div>
+                </div>
+
                 <div className="relative mb-8">
                     {/* 돌아가는 로딩 아이콘 */}
-                    <div className="absolute inset-0 bg-blue-500 blur-xl opacity-20 rounded-full animate-pulse" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-400 blur-xl opacity-20 rounded-full animate-pulse" />
                     <Loader2 className="w-16 h-16 text-blue-600 animate-spin relative z-10" />
                 </div>
 
@@ -65,9 +76,9 @@ export const Step4Analysis: React.FC<Props> = ({ userName, onNext }) => {
                 </p>
 
                 {/* 프로그레스 바 */}
-                <div className="w-full max-w-xs h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div className="w-full max-w-xs h-2 bg-slate-100 rounded-full overflow-hidden shadow-inner">
                     <div
-                        className="h-full bg-blue-500 transition-all duration-300 ease-out"
+                        className="h-full bg-gradient-to-r from-blue-600 to-cyan-500 transition-all duration-300 ease-out shadow-sm"
                         style={{ width: `${progress}%` }}
                     />
                 </div>
@@ -86,7 +97,7 @@ export const Step4Analysis: React.FC<Props> = ({ userName, onNext }) => {
                     분석 완료
                 </div>
                 <h2 className="text-2xl md:text-3xl font-bold text-slate-900 leading-tight">
-                    <span className="text-blue-600">{userName}</span>님에게 딱 맞는<br />
+                    <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">{userName}</span>님에게 딱 맞는<br />
                     <span className="underline decoration-blue-200 decoration-4 underline-offset-4">
                         BEST 성공 사례
                     </span>를 찾았습니다.
@@ -146,21 +157,26 @@ export const Step4Analysis: React.FC<Props> = ({ userName, onNext }) => {
                     onClick={onNext}
                     disabled={!isAgreed}
                     className={`
-            w-full mt-6 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all
+            w-full mt-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all relative overflow-hidden group
             ${isAgreed
-                            ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg hover:shadow-blue-500/30 transform hover:-translate-y-0.5'
-                            : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                            ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg hover:shadow-2xl hover:scale-105 transform'
+                            : 'bg-slate-100 text-slate-400 border-2 border-slate-200 cursor-not-allowed'
                         }
           `}
                 >
-                    {isAgreed ? (
-                        <>
-                            <ShieldCheck className="w-5 h-5" />
-                            결과 확인 및 상담 신청하기
-                        </>
-                    ) : (
-                        '동의하고 결과 확인하기'
+                    {isAgreed && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     )}
+                    <span className="relative z-10 flex items-center gap-2">
+                        {isAgreed ? (
+                            <>
+                                <ShieldCheck className="w-5 h-5" />
+                                결과 확인 및 상담 신청하기
+                            </>
+                        ) : (
+                            '동의하고 결과 확인하기'
+                        )}
+                    </span>
                 </button>
             </div>
 

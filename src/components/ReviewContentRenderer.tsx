@@ -2,17 +2,20 @@ import React from 'react';
 
 interface Props {
     content: string;
+    isFirstReview?: boolean; // 첫 번째 리뷰는 이미지 우선 로딩
 }
 
-export const ReviewContentRenderer: React.FC<Props> = ({ content }) => {
+export const ReviewContentRenderer: React.FC<Props> = ({ content, isFirstReview = false }) => {
     // 0. 줄바꿈이 있는 태그 처리 (태그 내부에서 줄바꿈 시 태그를 닫고 다시 열어줌)
     // 예: <high>첫줄\n둘째줄</high> -> <high>첫줄</high>\n<high>둘째줄</high>
-    const preprocessed = content.replace(/<(b|high|orange|blue)>([\s\S]*?)<\/\1>/gi, (match, tag, body) => {
+    let preprocessed = content.replace(/<(b|high|orange|blue)>([\s\S]*?)<\/\1>/gi, (match, tag, body) => {
         if (body.match(/\r?\n/)) {
             return `<${tag}>${body.replace(/\r?\n/g, `</${tag}>\n<${tag}>`)}</${tag}>`;
         }
         return match;
     });
+
+    // 0.5. 자동 grid 감싸기 제거 (사용자가 명시적으로 <grid> 태그를 사용해야 함)
 
     // 1. 태그 제거 및 줄바꿈으로 분리
     const lines = preprocessed
@@ -46,12 +49,16 @@ export const ReviewContentRenderer: React.FC<Props> = ({ content }) => {
                 renderedOutput.push(
                     <div key={`grid-${index}`} className="grid grid-cols-2 gap-2 my-4">
                         {gridImages.map((src, imgIdx) => (
-                            <div key={imgIdx} className="rounded-xl overflow-hidden shadow-sm border border-slate-100 aspect-[4/5] bg-slate-50">
+                            <div key={imgIdx} className="rounded-xl overflow-hidden shadow-sm border border-slate-100 aspect-[4/5] bg-slate-50 relative">
+                                {/* Placeholder gradient */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-slate-100 to-slate-50 animate-pulse" />
                                 <img
                                     src={src}
                                     alt="Review"
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-cover relative z-10"
                                     loading="lazy"
+                                    decoding="async"
+                                    fetchPriority={isFirstReview ? "high" : "low"}
                                 />
                             </div>
                         ))}
@@ -98,15 +105,21 @@ export const ReviewContentRenderer: React.FC<Props> = ({ content }) => {
         }
 
         if (!inGrid && isImagePath) {
-            // 그리드 밖의 단독 이미지
+            // 그리드 밖의 단독 이미지 (aspect ratio 제한 없이 원본 비율 유지)
             const cleanPath = trimmed.replace(/\\/g, '/').replace(/^public\//, '/');
             renderedOutput.push(
-                <img
-                    key={`img-${index}`}
-                    src={cleanPath}
-                    alt="Review"
-                    className="rounded-xl w-full object-cover shadow-md my-4"
-                />
+                <div key={`img-${index}`} className="my-4 rounded-xl overflow-hidden shadow-md border border-slate-100 relative bg-slate-50">
+                    {/* Placeholder */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-slate-100 to-slate-50 animate-pulse" />
+                    <img
+                        src={cleanPath}
+                        alt="Review"
+                        className="w-full object-contain relative z-10"
+                        loading="lazy"
+                        decoding="async"
+                        fetchPriority={isFirstReview ? "high" : "low"}
+                    />
+                </div>
             );
             return;
         }
