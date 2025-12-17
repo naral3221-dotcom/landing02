@@ -1,4 +1,5 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // 컴포넌트들
 import { Step1NamePhone, Step1Data } from './steps/Step1NamePhone';
@@ -6,7 +7,6 @@ import { Step2Age } from './steps/Step2Age';
 import { Step3ConcernSelection } from './steps/Step3Concern';
 import { Step4Question, Step4Data } from './steps/Step4Question';
 import { Step5Analysis } from './steps/Step5Analysis';
-import { Step6Result } from './steps/Step6Result';
 
 export interface MatchingData {
     name: string;
@@ -29,6 +29,7 @@ const INITIAL_DATA: MatchingData = {
 export const AiMatchingSystem: React.FC = () => {
     const [step, setStep] = useState<number>(1);
     const [data, setData] = useState<MatchingData>(INITIAL_DATA);
+    const navigate = useNavigate();
 
     // ✨ [수정 1] 컨테이너의 위치를 잡기 위한 Ref 생성
     const containerRef = useRef<HTMLDivElement>(null);
@@ -91,18 +92,11 @@ export const AiMatchingSystem: React.FC = () => {
         handleScroll();
     };
 
-    // STEP 5 완료 -> 결과(6)로 이동
+    // STEP 5 완료 -> /result 페이지로 이동
     const handleStep5Next = () => {
-        setStep(6);
-        handleScroll();
-    };
-
-    const handleRestart = () => {
-        if (window.confirm('처음부터 다시 선택하시겠습니까? 입력한 정보가 초기화됩니다.')) {
-            setData(INITIAL_DATA);
-            setStep(1);
-            handleScroll();
-        }
+        // userData를 URL 파라미터로 전달
+        const queryData = encodeURIComponent(JSON.stringify(data));
+        navigate(`/result?data=${queryData}`);
     };
 
     // 총 입력 단계 수 (결과 페이지 제외)
@@ -170,13 +164,6 @@ export const AiMatchingSystem: React.FC = () => {
                     <Step5Analysis
                         userName={data.name}
                         onNext={handleStep5Next}
-                    />
-                )}
-
-                {step === 6 && (
-                    <Step6Result
-                        userData={data}
-                        onRestart={handleRestart}
                     />
                 )}
             </div>

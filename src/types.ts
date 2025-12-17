@@ -5,6 +5,7 @@ export type TargetArea = 'mid' | 'lower'; // 중안면, 하안면
 
 export interface ReviewData {
     id: number;
+    name?: string; // 작성자 이름 (e.g. '이**님')
     age: AgeGroup;
     targets: TargetArea[]; // ['mid'], ['lower'], or ['mid', 'lower']
     tags: string[]; // 필터링에 사용될 태그 (예: '팔자주름', '이중턱')

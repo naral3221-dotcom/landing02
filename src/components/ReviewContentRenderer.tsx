@@ -2,10 +2,9 @@ import React from 'react';
 
 interface Props {
     content: string;
-    isFirstReview?: boolean; // 첫 번째 리뷰는 이미지 우선 로딩
 }
 
-export const ReviewContentRenderer: React.FC<Props> = ({ content, isFirstReview = false }) => {
+export const ReviewContentRenderer: React.FC<Props> = ({ content }) => {
     // 0. 줄바꿈이 있는 태그 처리 (태그 내부에서 줄바꿈 시 태그를 닫고 다시 열어줌)
     // 예: <high>첫줄\n둘째줄</high> -> <high>첫줄</high>\n<high>둘째줄</high>
     let preprocessed = content.replace(/<(b|high|orange|blue)>([\s\S]*?)<\/\1>/gi, (match, tag, body) => {
@@ -22,10 +21,6 @@ export const ReviewContentRenderer: React.FC<Props> = ({ content, isFirstReview 
         .replace(/\r/g, '') // \r 제거 (줄바꿈 정리)
         .split('\n');
 
-    // 2. 그리드 모드 상태 관리 (이미지를 묶어서 보여주기 위함)
-    let inGrid = false;
-    let gridImages: string[] = [];
-
     // 렌더링 결과를 담을 배열
     const renderedOutput: React.ReactNode[] = [];
 
@@ -36,36 +31,9 @@ export const ReviewContentRenderer: React.FC<Props> = ({ content, isFirstReview 
             return;
         }
 
-        // --- A. Grid(이미지 모음) 처리 로직 ---
-        if (trimmed.toLowerCase() === '<grid>') {
-            inGrid = true;
-            gridImages = []; // 그리드 시작
-            return;
-        }
-        if (trimmed.toLowerCase() === '</grid>') {
-            inGrid = false;
-            // 그리드 닫힐 때 모아둔 이미지들을 2열 그리드로 렌더링
-            if (gridImages.length > 0) {
-                renderedOutput.push(
-                    <div key={`grid-${index}`} className="grid grid-cols-2 gap-2 my-4">
-                        {gridImages.map((src, imgIdx) => (
-                            <div key={imgIdx} className="rounded-xl overflow-hidden shadow-sm border border-slate-100 aspect-[4/5] bg-slate-50 relative">
-                                {/* Placeholder gradient */}
-                                <div className="absolute inset-0 bg-gradient-to-br from-slate-100 to-slate-50 animate-pulse" />
-                                <img
-                                    src={src}
-                                    alt="Review"
-                                    className="w-full h-full object-cover relative z-10"
-                                    loading="lazy"
-                                    decoding="async"
-                                    fetchPriority={isFirstReview ? "high" : "low"}
-                                />
-                            </div>
-                        ))}
-                    </div>
-                );
-            }
-            return;
+        // --- A. Grid 태그는 무시 (이미지를 그리드로 묶지 않음) ---
+        if (trimmed.toLowerCase() === '<grid>' || trimmed.toLowerCase() === '</grid>') {
+            return; // 그리드 태그는 건너뜀
         }
 
         // --- B. 텍스트 효과 처리 로직 (이미지 인식보다 우선) ---
@@ -95,18 +63,12 @@ export const ReviewContentRenderer: React.FC<Props> = ({ content, isFirstReview 
         // --- C. 이미지 경로 감지 (윈도우 경로 \ 포함) ---
         // 태그(<)나 괄호(()로 시작하지 않으며, 확장자가 있거나 public\로 시작하는 경우
         const isImagePath = !trimmed.startsWith('<') && !trimmed.startsWith('(') &&
-            (trimmed.match(/\.(jpg|jpeg|png|gif|webp)$/i) || trimmed.startsWith('public\\'));
+            (trimmed.match(/\.(jpg|jpeg|png|gif|webp)$/i) || trimmed.startsWith('public\\') || trimmed.includes('\\match\\'));
 
-        if (inGrid && isImagePath) {
-            // 그리드 내부라면 이미지 배열에 추가 (경로 보정: public 제거, \ -> /)
+        if (isImagePath) {
             const cleanPath = trimmed.replace(/\\/g, '/').replace(/^public\//, '/');
-            gridImages.push(cleanPath);
-            return;
-        }
 
-        if (!inGrid && isImagePath) {
-            // 그리드 밖의 단독 이미지 (aspect ratio 제한 없이 원본 비율 유지)
-            const cleanPath = trimmed.replace(/\\/g, '/').replace(/^public\//, '/');
+            // 모든 이미지를 단독 이미지로 렌더링 (그리드 사용 안 함)
             renderedOutput.push(
                 <div key={`img-${index}`} className="my-4 rounded-xl overflow-hidden shadow-md border border-slate-100 relative bg-slate-50">
                     {/* Placeholder */}
@@ -117,7 +79,6 @@ export const ReviewContentRenderer: React.FC<Props> = ({ content, isFirstReview 
                         className="w-full object-contain relative z-10"
                         loading="lazy"
                         decoding="async"
-                        fetchPriority={isFirstReview ? "high" : "low"}
                     />
                 </div>
             );
