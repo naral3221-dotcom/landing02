@@ -40,24 +40,25 @@ export const Step1NamePhone: React.FC<Props> = ({ onNext, defaultValues }) => {
     return (
         <div className="w-full max-w-xl mx-auto animate-fadeIn">
             {/* 헤더 개선: 뱃지 추가 */}
-            <div className="text-center mb-10 space-y-4">
+            <div className="text-center mb-14 md:mb-10 space-y-4">
                 {/* 신뢰 뱃지 */}
                 <div className="flex items-center justify-center gap-2 mb-2">
-                    <div className="px-3 py-1 bg-green-50 border border-green-200 rounded-full text-xs font-bold text-green-700 flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                    <div className="px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1" style={{ backgroundColor: 'rgba(212, 184, 106, 0.15)', border: '1px solid rgba(212, 184, 106, 0.3)', color: '#8B7355' }}>
+                        <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: '#C9A962' }} />
                         실시간 AI 분석
                     </div>
-                    <div className="px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-xs font-bold text-blue-700">
+                    <div className="px-3 py-1 rounded-full text-xs font-bold" style={{ backgroundColor: 'rgba(212, 184, 106, 0.15)', border: '1px solid rgba(212, 184, 106, 0.3)', color: '#8B7355' }}>
                         🔒 정보 보호
                     </div>
                 </div>
 
                 <h3 className="text-xl md:text-2xl font-bold text-slate-900">
                     정확한 분석을 위해<br className="md:hidden" />
-                    <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">기본 정보를 입력해주세요</span>
+                    <span style={{ background: 'linear-gradient(90deg, #8B7355, #C9A962)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', color: 'transparent' }}>기본 정보를 입력해주세요</span>
                 </h3>
-                <p className="text-slate-500 text-sm max-w-md mx-auto">
-                    입력하신 정보는 <strong className="text-slate-700">상담 매칭 외 다른 용도로 사용되지 않습니다.</strong>
+                <p className="text-slate-500 text-sm max-w-md mx-auto leading-relaxed">
+                    입력하신 정보는<br />
+                    <strong className="text-slate-700">상담 매칭 외 다른 용도로 사용되지 않습니다.</strong>
                 </p>
             </div>
 
@@ -73,8 +74,8 @@ export const Step1NamePhone: React.FC<Props> = ({ onNext, defaultValues }) => {
                             </span>
                         )}
                     </label>
-                    <div className="flex items-center border-2 border-slate-200/50 bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden hover:border-blue-300 hover:shadow-lg focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all group">
-                        <div className="bg-gradient-to-br from-slate-50 to-blue-50 px-4 py-4 border-r border-slate-100 text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                    <div className="flex items-center border-2 border-slate-200/50 bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden hover:shadow-lg focus-within:ring-2 transition-all group" style={{ '--tw-ring-color': 'rgba(201, 169, 98, 0.5)' } as React.CSSProperties} onFocus={(e) => e.currentTarget.style.borderColor = '#C9A962'} onBlur={(e) => e.currentTarget.style.borderColor = ''}>
+                        <div className="bg-gradient-to-br from-slate-50 px-4 py-4 border-r border-slate-100 text-slate-400 group-focus-within:text-amber-600 transition-colors" style={{ background: 'linear-gradient(to bottom right, #fafaf9, rgba(212, 184, 106, 0.1))' }}>
                             <User className="w-5 h-5" />
                         </div>
                         <input
@@ -97,8 +98,8 @@ export const Step1NamePhone: React.FC<Props> = ({ onNext, defaultValues }) => {
                             </span>
                         )}
                     </label>
-                    <div className="flex items-center border-2 border-slate-200/50 bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden hover:border-blue-300 hover:shadow-lg focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all group">
-                        <div className="bg-gradient-to-br from-slate-50 to-blue-50 px-4 py-4 border-r border-slate-100 text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                    <div className="flex items-center border-2 border-slate-200/50 bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden hover:shadow-lg focus-within:ring-2 transition-all group" style={{ '--tw-ring-color': 'rgba(201, 169, 98, 0.5)' } as React.CSSProperties} onFocus={(e) => e.currentTarget.style.borderColor = '#C9A962'} onBlur={(e) => e.currentTarget.style.borderColor = ''}>
+                        <div className="bg-gradient-to-br from-slate-50 px-4 py-4 border-r border-slate-100 text-slate-400 group-focus-within:text-amber-600 transition-colors" style={{ background: 'linear-gradient(to bottom right, #fafaf9, rgba(212, 184, 106, 0.1))' }}>
                             <Phone className="w-5 h-5" />
                         </div>
                         <input
@@ -119,13 +120,14 @@ export const Step1NamePhone: React.FC<Props> = ({ onNext, defaultValues }) => {
                         className={`
               w-full py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-2 relative overflow-hidden group
               ${isValid
-                                ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg hover:shadow-2xl hover:scale-105 transform'
+                                ? 'text-white shadow-lg hover:shadow-2xl hover:scale-105 transform'
                                 : 'bg-slate-100 text-slate-400 border-2 border-slate-200 cursor-not-allowed'
                             }
             `}
+                        style={isValid ? { background: 'linear-gradient(135deg, #8B7355 0%, #C9A962 100%)', boxShadow: '0 10px 30px -5px rgba(139, 115, 85, 0.4)' } : {}}
                     >
                         {isValid && (
-                            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: 'linear-gradient(135deg, rgba(201, 169, 98, 0.2), rgba(139, 115, 85, 0.2))' }} />
                         )}
                         <span className="relative z-10 flex items-center gap-2">
                             다음 (연령 선택)

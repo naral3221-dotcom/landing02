@@ -133,6 +133,25 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  /* 텍스트 잘림 방지 - 전역 적용 */
+  h1, h2, h3, h4, h5, h6, p, span, a, button, label {
+    overflow-wrap: break-word;
+    word-break: keep-all;
+    -webkit-text-stroke: 0;
+    padding-right: 0.05em; /* 이탤릭 글자 잘림 방지 */
+  }
+
+  /* 이탤릭 텍스트 잘림 방지 */
+  *[class*="italic"] {
+    padding-right: 0.1em;
+    padding-left: 0.02em;
+  }
+
+  /* 그라디언트 텍스트 잘림 방지 */
+  *[class*="bg-clip-text"] {
+    padding: 0.05em;
+  }
 }
 
 /* Custom Animations */

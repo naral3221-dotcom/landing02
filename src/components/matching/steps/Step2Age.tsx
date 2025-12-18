@@ -19,18 +19,18 @@ export const Step2Age: React.FC<Props> = ({ onNext, defaultAge }) => {
             <div className="text-center mb-10 space-y-4">
                 {/* 신뢰 뱃지 */}
                 <div className="flex items-center justify-center gap-2 mb-2">
-                    <div className="px-3 py-1 bg-green-50 border border-green-200 rounded-full text-xs font-bold text-green-700 flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                    <div className="px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1" style={{ backgroundColor: 'rgba(212, 184, 106, 0.15)', border: '1px solid rgba(212, 184, 106, 0.3)', color: '#8B7355' }}>
+                        <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: '#C9A962' }} />
                         실시간 AI 분석
                     </div>
-                    <div className="px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-xs font-bold text-blue-700">
+                    <div className="px-3 py-1 rounded-full text-xs font-bold" style={{ backgroundColor: 'rgba(212, 184, 106, 0.15)', border: '1px solid rgba(212, 184, 106, 0.3)', color: '#8B7355' }}>
                         STEP 2 OF 5
                     </div>
                 </div>
 
                 <h3 className="text-xl md:text-2xl font-bold text-slate-900">
                     고객님의 <br className="md:hidden" />
-                    <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">연령대를 선택해주세요</span>
+                    <span style={{ background: 'linear-gradient(90deg, #8B7355, #C9A962)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', color: 'transparent' }}>연령대를 선택해주세요</span>
                 </h3>
                 <p className="text-slate-500 text-sm max-w-md mx-auto">
                     연령별 맞춤형 후기를 찾아드립니다.
@@ -45,13 +45,14 @@ export const Step2Age: React.FC<Props> = ({ onNext, defaultAge }) => {
                         className={`
               py-8 rounded-2xl font-bold text-xl transition-all duration-200 border-2 relative overflow-hidden group
               ${age === ageOption
-                                ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white border-blue-500 shadow-lg transform scale-[1.02]'
-                                : 'bg-white/80 backdrop-blur-sm text-slate-500 border-slate-200/50 hover:border-blue-300 hover:bg-slate-50 hover:shadow-lg'
+                                ? 'text-white shadow-lg transform scale-[1.02]'
+                                : 'bg-white/80 backdrop-blur-sm text-slate-500 border-slate-200/50 hover:bg-slate-50 hover:shadow-lg'
                             }
             `}
+                        style={age === ageOption ? { background: 'linear-gradient(135deg, #8B7355 0%, #C9A962 100%)', borderColor: '#C9A962' } : {}}
                     >
                         {age === ageOption && (
-                            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: 'linear-gradient(135deg, rgba(201, 169, 98, 0.2), rgba(139, 115, 85, 0.2))' }} />
                         )}
                         <span className="relative z-10">{ageOption}대</span>
                     </button>
@@ -65,13 +66,14 @@ export const Step2Age: React.FC<Props> = ({ onNext, defaultAge }) => {
                     className={`
             w-full py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-2 relative overflow-hidden group
             ${age
-                            ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg hover:shadow-2xl hover:scale-105 transform'
+                            ? 'text-white shadow-lg hover:shadow-2xl hover:scale-105 transform'
                             : 'bg-slate-100 text-slate-400 border-2 border-slate-200 cursor-not-allowed'
                         }
           `}
+                    style={age ? { background: 'linear-gradient(135deg, #8B7355 0%, #C9A962 100%)', boxShadow: '0 10px 30px -5px rgba(139, 115, 85, 0.4)' } : {}}
                 >
                     {age && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: 'linear-gradient(135deg, rgba(201, 169, 98, 0.2), rgba(139, 115, 85, 0.2))' }} />
                     )}
                     <span className="relative z-10 flex items-center gap-2">
                         다음 (고민 선택)

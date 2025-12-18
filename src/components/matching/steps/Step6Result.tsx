@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { CheckCircle, Clock, User, ChevronRight, Star, Sparkles } from 'lucide-react';
+import { CheckCircle, Clock, User, ChevronRight, Star, Sparkles, FileText, Target, TrendingUp } from 'lucide-react';
 import { motion } from 'motion/react';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -28,7 +28,6 @@ interface Props {
 }
 
 export const Step6Result: React.FC<Props> = ({ userData, onRestart }) => {
-    // --- 모달 상태 관리 ---
     const [selectedReview, setSelectedReview] = useState<ReviewData | null>(null);
 
     // --- 매칭 로직 ---
@@ -68,7 +67,7 @@ export const Step6Result: React.FC<Props> = ({ userData, onRestart }) => {
         }
         if (userData.hasContouringExp) keywords.push('#윤곽후관리');
         if (userData.priority) keywords.push(`#${userData.priority.split(' ')[0]}중요`);
-        return keywords.slice(0, 5); // 최대 5개
+        return keywords.slice(0, 5);
     }, [userData]);
 
     // --- 이미지 추출 함수 ---
@@ -100,126 +99,248 @@ export const Step6Result: React.FC<Props> = ({ userData, onRestart }) => {
         focusOnSelect: false,
     };
 
+    // 매칭률 계산 (95% 기본 + 태그 매칭에 따라 조정)
+    const matchRate = Math.min(98, 90 + Math.floor(matchedReviews.length / 2));
+
     return (
-        <div className="min-h-screen bg-slate-100 flex justify-center items-start pt-0 sm:pt-10 pb-0 sm:pb-10">
-            <div className="w-full max-w-md bg-white sm:rounded-[2.5rem] shadow-2xl overflow-hidden min-h-screen sm:min-h-[800px] flex flex-col">
+        <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #4A3C1A 0%, #6B5A2F 30%, #8B7355 70%, #5C4A1F 100%)' }}>
+            <div className="w-full max-w-[800px] mx-auto overflow-hidden flex flex-col relative">
 
-                {/* ========== Hero Section ========== */}
-                <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-cyan-500 pt-12 pb-20 px-6 rounded-b-[3rem] shadow-lg z-10">
-                    <div className="flex flex-col items-center text-center text-white space-y-6">
-                        <motion.div
-                            initial={{ scale: 0, rotate: -180 }}
-                            animate={{ scale: 1, rotate: 0 }}
-                            transition={{ type: "spring", stiffness: 260, damping: 20, duration: 0.8 }}
-                            className="bg-white/20 backdrop-blur-md p-4 rounded-full shadow-inner"
-                        >
-                            <div className="bg-white text-indigo-600 rounded-full p-3 shadow-xl">
-                                <CheckCircle size={48} strokeWidth={3} />
-                            </div>
-                        </motion.div>
-
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3 }}
-                        >
-                            <h1 className="text-2xl font-bold mb-2 leading-snug">
-                                {userData.name}님의 상담이<br />정상적으로 접수되었습니다.
-                            </h1>
-                            <p className="text-blue-100 font-medium opacity-90">
-                                전문 상담사가 배정되었습니다.
-                            </p>
-                        </motion.div>
+                {/* ========== Header ========== */}
+                <div className="flex items-center justify-between px-6 py-4 relative z-10">
+                    <div className="flex items-center gap-3">
+                        <span className="text-2xl">👑</span>
+                        <span className="text-white font-bold text-lg">밸런스랩</span>
                     </div>
-
-                    {/* Decorative background elements */}
-                    <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-30">
-                        <div className="absolute top-[-10%] left-[-10%] w-40 h-40 bg-purple-400 rounded-full blur-3xl"></div>
-                        <div className="absolute bottom-[-10%] right-[-10%] w-40 h-40 bg-cyan-400 rounded-full blur-3xl"></div>
+                    <div className="flex items-center gap-4">
+                        <span className="text-white/70 text-sm">🔔</span>
+                        <span className="text-white/70 text-sm">👤</span>
                     </div>
                 </div>
 
-                {/* ========== AI Analysis Report ========== */}
-                <div className="px-6 -mt-12 relative z-20">
+                {/* ========== Hero Section with Images ========== */}
+                <div className="relative px-6 pt-4 pb-8">
+                    {/* 3 Images Layout */}
+                    <div className="flex items-center justify-center gap-3 mb-6">
+                        {/* Left Image */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -30 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="w-24 h-28 rounded-xl overflow-hidden border-2 shadow-lg"
+                            style={{ borderColor: '#C9A962' }}
+                        >
+                            {matchedReviews[0] && (
+                                <img
+                                    src={extractImages(matchedReviews[0].content).find(img => img.includes('-b-')) || '/placeholder.jpg'}
+                                    alt="Before"
+                                    className="w-full h-full object-cover"
+                                />
+                            )}
+                        </motion.div>
+
+                        {/* Center - Main Display with Percentage */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.3, type: "spring" }}
+                            className="relative w-36 h-44 rounded-2xl overflow-hidden border-4 shadow-2xl"
+                            style={{ borderColor: '#D4B86A', background: 'linear-gradient(135deg, #5C4A1F 0%, #8B7355 100%)' }}
+                        >
+                            {matchedReviews[0] ? (
+                                <img
+                                    src={extractImages(matchedReviews[0].content).find(img => img.includes('-a-')) || '/placeholder.jpg'}
+                                    alt="After"
+                                    className="w-full h-full object-cover"
+                                />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center">
+                                    <span className="text-white/50 text-sm">이미지</span>
+                                </div>
+                            )}
+                            {/* Percentage Badge */}
+                            <div className="absolute bottom-2 right-2 px-3 py-1 rounded-lg font-extrabold text-2xl"
+                                style={{ background: 'linear-gradient(135deg, #D4B86A, #F5D88E)', color: '#3D2E0F' }}>
+                                {matchRate}%
+                            </div>
+                        </motion.div>
+
+                        {/* Right Image */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 30 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="w-24 h-28 rounded-xl overflow-hidden border-2 shadow-lg"
+                            style={{ borderColor: '#C9A962' }}
+                        >
+                            {matchedReviews[1] && (
+                                <img
+                                    src={extractImages(matchedReviews[1].content).find(img => img.includes('-a-')) || '/placeholder.jpg'}
+                                    alt="Sample"
+                                    className="w-full h-full object-cover"
+                                />
+                            )}
+                        </motion.div>
+                    </div>
+
+                    {/* User Info */}
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }}
+                        initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 }}
-                        className="border-0 shadow-xl overflow-hidden rounded-3xl bg-white"
+                        className="text-center"
                     >
-                        <div className="bg-slate-900 px-6 py-4 flex items-center justify-between">
-                            <span className="text-white font-bold flex items-center gap-2">
-                                <Sparkles size={18} className="text-cyan-400" />
-                                AI Analysis Report
-                            </span>
-                            <span className="text-xs text-slate-400 bg-slate-800 px-2 py-1 rounded-full">Ver 2.0</span>
-                        </div>
-                        <div className="p-6 bg-white">
-                            <div className="flex flex-col items-center">
-                                <div className="w-full flex justify-between items-start mb-6">
-                                    <div className="space-y-1">
-                                        <p className="text-sm text-slate-500 font-medium">분석 대상</p>
-                                        <p className="text-lg font-bold text-slate-900">{userData.name}님</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-sm text-slate-500 font-medium">종합 매칭률</p>
-                                        <p className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-                                            98%
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className="w-full h-px bg-slate-200 mb-6" />
-
-                                <div className="w-full">
-                                    <p className="text-sm text-slate-500 mb-3 font-medium">주요 키워드 분석</p>
-                                    <div className="flex flex-col gap-2 w-full">
-                                        {analysisKeywords.map((tag, i) => (
-                                            <span key={i} className="w-full px-3 py-2 text-sm font-medium bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-100 rounded-lg text-center break-keep">
-                                                {tag}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div className="mt-6 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-4 text-center w-full">
-                                    <p className="text-sm text-slate-800 font-bold">
-                                        🎉 축하드립니다! 총 <span className="text-indigo-600 text-lg font-extrabold">{matchedReviews.length}</span>건의 후기가 매칭되었습니다!
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                        <h1 className="text-xl font-bold text-white mb-2">
+                            {userData.name}님의 맞춤 분석 완료
+                        </h1>
+                        <p className="text-sm" style={{ color: '#D4B86A' }}>
+                            AI가 {matchedReviews.length}건의 유사 케이스를 찾았습니다
+                        </p>
                     </motion.div>
                 </div>
 
+                {/* ========== 3 Column Info Cards ========== */}
+                <div className="px-4 pb-6">
+                    <div className="grid grid-cols-3 gap-3">
+                        {/* AI 분석 요약 */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.6 }}
+                            className="rounded-2xl p-4 border"
+                            style={{
+                                background: 'linear-gradient(180deg, rgba(60, 48, 20, 0.95) 0%, rgba(80, 65, 30, 0.9) 100%)',
+                                borderColor: 'rgba(212, 184, 106, 0.3)'
+                            }}
+                        >
+                            <div className="flex items-center gap-2 mb-3">
+                                <FileText size={16} style={{ color: '#D4B86A' }} />
+                                <span className="text-white font-bold text-xs">AI 분석 요약</span>
+                            </div>
+                            <ul className="space-y-1.5 text-[11px]" style={{ color: '#E8D9B0' }}>
+                                <li>• {userData.age}대 맞춤 분석</li>
+                                <li>• {userData.selectedTags[0] || '피부'} 고민 파악</li>
+                                <li>• 최적 솔루션 도출</li>
+                            </ul>
+                        </motion.div>
+
+                        {/* 매칭 포인트 */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.7 }}
+                            className="rounded-2xl p-4 border"
+                            style={{
+                                background: 'linear-gradient(180deg, rgba(60, 48, 20, 0.95) 0%, rgba(80, 65, 30, 0.9) 100%)',
+                                borderColor: 'rgba(212, 184, 106, 0.3)'
+                            }}
+                        >
+                            <div className="flex items-center gap-2 mb-3">
+                                <Target size={16} style={{ color: '#D4B86A' }} />
+                                <span className="text-white font-bold text-xs">매칭 포인트</span>
+                            </div>
+                            <ul className="space-y-1.5 text-[11px]" style={{ color: '#E8D9B0' }}>
+                                <li>• 동일 연령대 케이스</li>
+                                <li>• 유사 고민 매칭</li>
+                                <li>• 만족도 높은 시술</li>
+                            </ul>
+                        </motion.div>
+
+                        {/* 기대 효과 */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.8 }}
+                            className="rounded-2xl p-4 border"
+                            style={{
+                                background: 'linear-gradient(180deg, rgba(60, 48, 20, 0.95) 0%, rgba(80, 65, 30, 0.9) 100%)',
+                                borderColor: 'rgba(212, 184, 106, 0.3)'
+                            }}
+                        >
+                            <div className="flex items-center gap-2 mb-3">
+                                <TrendingUp size={16} style={{ color: '#D4B86A' }} />
+                                <span className="text-white font-bold text-xs">기대 효과</span>
+                            </div>
+                            <ul className="space-y-1.5 text-[11px]" style={{ color: '#E8D9B0' }}>
+                                <li>• 자연스러운 개선</li>
+                                <li>• 빠른 일상 복귀</li>
+                                <li>• 높은 만족도</li>
+                            </ul>
+                        </motion.div>
+                    </div>
+                </div>
+
+                {/* ========== CTA Button ========== */}
+                <div className="px-6 pb-6">
+                    <motion.a
+                        href="tel:1661-8581"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.9 }}
+                        className="block w-full py-4 rounded-2xl text-center font-bold text-lg shadow-xl"
+                        style={{
+                            background: 'linear-gradient(135deg, #D4B86A 0%, #F5D88E 50%, #D4B86A 100%)',
+                            color: '#3D2E0F',
+                            boxShadow: '0 8px 32px rgba(212, 184, 106, 0.4)'
+                        }}
+                    >
+                        상담신청
+                    </motion.a>
+                </div>
+
+                {/* ========== Keywords Section ========== */}
+                <div className="px-6 pb-6">
+                    <div className="flex flex-wrap gap-2 justify-center">
+                        {analysisKeywords.map((tag, i) => (
+                            <span
+                                key={i}
+                                className="px-3 py-1.5 text-xs font-medium rounded-full"
+                                style={{
+                                    background: 'rgba(212, 184, 106, 0.15)',
+                                    color: '#D4B86A',
+                                    border: '1px solid rgba(212, 184, 106, 0.3)'
+                                }}
+                            >
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+
                 {/* ========== Case Review Slider ========== */}
-                <div className="py-12 px-6 bg-slate-50">
+                <div className="py-8 px-6 relative" style={{ background: 'rgba(0, 0, 0, 0.2)' }}>
                     <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-lg font-bold text-slate-900">투명브이리프팅 후기</h3>
-                        <span className="text-xs text-blue-600 font-semibold flex items-center cursor-pointer">
+                        <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                            <Star size={18} style={{ color: '#D4B86A' }} fill="#D4B86A" />
+                            맞춤 후기
+                        </h3>
+                        <span className="text-xs font-semibold flex items-center cursor-pointer" style={{ color: '#D4B86A' }}>
                             더보기 <ChevronRight size={14} />
                         </span>
                     </div>
 
                     {matchedReviews.length > 0 ? (
-                        <div className="pb-10" style={{ height: '420px' }}>
+                        <div className="pb-10" style={{ height: '400px' }}>
                             <Slider {...sliderSettings}>
                                 {matchedReviews.slice(0, 10).map((review, index) => {
                                     const images = extractImages(review.content);
-                                    const beforeImage = images.find(img => img.includes('-b-')); // b type = before
-                                    const afterImage = images.find(img => img.includes('-a-'));  // a type = after
-
-                                    const tagText = `${review.age}대 / ${review.tags.slice(0, 2).join(' / ')}`;
+                                    const beforeImage = images.find(img => img.includes('-b-'));
+                                    const afterImage = images.find(img => img.includes('-a-'));
 
                                     return (
                                         <div key={review.id} className="px-1">
                                             <div
                                                 onClick={() => setSelectedReview(review)}
-                                                style={{ height: '380px' }}
-                                                className="overflow-hidden border-none shadow-md rounded-2xl bg-white cursor-pointer hover:shadow-xl transition-shadow flex flex-col">
-                                                <div className="relative w-full flex-shrink-0 flex" style={{ height: '192px' }}>
-                                                    {/* Image Counter Badge */}
-                                                    <div className="absolute top-2 right-2 bg-black/50 backdrop-blur-sm text-white text-[10px] px-2.5 py-1 rounded-full font-medium z-10 border border-white/10">
+                                                className="overflow-hidden shadow-lg rounded-2xl cursor-pointer hover:shadow-xl transition-shadow flex flex-col border"
+                                                style={{
+                                                    height: '360px',
+                                                    background: 'linear-gradient(180deg, rgba(60, 48, 20, 0.98) 0%, rgba(45, 36, 15, 0.98) 100%)',
+                                                    borderColor: 'rgba(212, 184, 106, 0.3)'
+                                                }}
+                                            >
+                                                <div className="relative w-full flex-shrink-0 flex" style={{ height: '180px' }}>
+                                                    <div className="absolute top-2 right-2 px-2.5 py-1 rounded-full font-medium text-[10px] z-10"
+                                                        style={{ background: 'rgba(212, 184, 106, 0.9)', color: '#3D2E0F' }}>
                                                         {index + 1} / {Math.min(matchedReviews.length, 10)}
                                                     </div>
 
@@ -227,38 +348,49 @@ export const Step6Result: React.FC<Props> = ({ userData, onRestart }) => {
                                                         {beforeImage ? (
                                                             <img src={beforeImage} alt="Before" className="w-full h-full object-cover" />
                                                         ) : (
-                                                            <div className="w-full h-full bg-slate-200 flex items-center justify-center text-slate-400 text-xs">Before</div>
+                                                            <div className="w-full h-full flex items-center justify-center" style={{ background: '#2D240F', color: '#6B5A2F' }}>Before</div>
                                                         )}
-                                                        <div className="absolute top-2 left-2 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded">Before</div>
+                                                        <div className="absolute top-2 left-2 text-white text-[10px] px-2 py-0.5 rounded" style={{ background: 'rgba(0,0,0,0.6)' }}>Before</div>
                                                     </div>
                                                     <div className="w-1/2 relative">
                                                         {afterImage ? (
                                                             <img src={afterImage} alt="After" className="w-full h-full object-cover" />
                                                         ) : (
-                                                            <div className="w-full h-full bg-slate-200 flex items-center justify-center text-slate-400 text-xs">After</div>
+                                                            <div className="w-full h-full flex items-center justify-center" style={{ background: '#2D240F', color: '#6B5A2F' }}>After</div>
                                                         )}
-                                                        <div className="absolute top-2 left-2 bg-blue-600/80 text-white text-[10px] px-2 py-0.5 rounded">After</div>
+                                                        <div className="absolute top-2 left-2 text-white text-[10px] px-2 py-0.5 rounded" style={{ background: '#D4B86A', color: '#3D2E0F' }}>After</div>
                                                     </div>
                                                 </div>
-                                                <div className="flex-1 p-4 bg-white flex flex-col justify-between">
+
+                                                <div className="flex-1 p-4 flex flex-col justify-between">
                                                     <div>
                                                         <div className="flex items-center justify-between mb-3">
-                                                            <span className="text-xs text-slate-500 border border-slate-200 px-2 py-1 rounded">
-                                                                {tagText}
+                                                            <span className="text-xs px-2 py-1 rounded" style={{ background: 'rgba(212, 184, 106, 0.15)', color: '#D4B86A', border: '1px solid rgba(212, 184, 106, 0.3)' }}>
+                                                                {review.age}대 / {review.tags.slice(0, 2).join(' / ')}
                                                             </span>
-                                                            <span className="text-amber-400 text-sm tracking-tighter">★★★★★</span>
+                                                            <span className="text-sm tracking-tighter" style={{ color: '#D4B86A' }}>★★★★★</span>
                                                         </div>
-                                                        <div className="flex items-center gap-1.5 text-sm text-indigo-600 bg-indigo-50 px-3 py-2 rounded-lg w-fit font-semibold mb-3">
+                                                        <div className="flex items-center gap-1.5 text-sm px-3 py-2 rounded-lg w-fit font-semibold mb-3" style={{ background: 'rgba(212, 184, 106, 0.15)', color: '#D4B86A' }}>
                                                             <Star size={14} fill="currentColor" />
                                                             {review.targets.includes('mid') && review.targets.includes('lower') ? '중안면+하안면' :
                                                                 review.targets.includes('mid') ? '중안면 개선' :
                                                                     review.targets.includes('lower') ? '하안면 개선' : '전체 개선'} 케이스
                                                         </div>
+                                                        <div className="flex flex-wrap gap-1.5">
+                                                            {[
+                                                                `#${review.age}대`,
+                                                                ...review.tags.slice(0, 2).map(tag => `#${tag}`),
+                                                            ].map((tag, i) => (
+                                                                <span key={i} className="text-[11px] px-2 py-1 rounded-full font-medium"
+                                                                    style={{ background: 'rgba(212, 184, 106, 0.1)', color: '#C9A962', border: '1px solid rgba(212, 184, 106, 0.2)' }}>
+                                                                    {tag}
+                                                                </span>
+                                                            ))}
+                                                        </div>
                                                     </div>
-                                                    <div className="pt-3 border-t border-slate-200">
-                                                        <span className="text-blue-600 text-xs font-bold flex items-center justify-center gap-1">
-                                                            자세히 보기
-                                                            <ChevronRight size={12} />
+                                                    <div className="pt-3 border-t" style={{ borderColor: 'rgba(212, 184, 106, 0.2)' }}>
+                                                        <span className="text-xs font-bold flex items-center justify-center gap-1" style={{ color: '#D4B86A' }}>
+                                                            자세히 보기 <ChevronRight size={12} />
                                                         </span>
                                                     </div>
                                                 </div>
@@ -269,104 +401,83 @@ export const Step6Result: React.FC<Props> = ({ userData, onRestart }) => {
                             </Slider>
                         </div>
                     ) : (
-                        <div className="text-center py-10 bg-white rounded-xl border border-slate-200 text-slate-400">
+                        <div className="text-center py-10 rounded-xl" style={{ background: 'rgba(60, 48, 20, 0.5)', color: '#8B7355' }}>
                             매칭되는 사례를 찾지 못했습니다.
                         </div>
                     )}
                 </div>
 
-                {/* ========== Doctor Comment ========== */}
-                <div className="px-6 pb-12 bg-slate-50">
-                    <h3 className="text-lg font-bold text-slate-900 mb-6">담당 의료진 코멘트</h3>
-                    <div className="flex gap-4 items-start">
-                        <div className="flex flex-col items-center gap-2 min-w-[70px]">
-                            <div className="w-16 h-16 border-2 border-white shadow-md rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xl">
-                                DR
-                            </div>
-                            <span className="text-xs font-bold text-slate-700">밸런스랩 원장</span>
-                        </div>
-                        <div className="relative bg-white p-5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 flex-1">
-                            <p className="text-sm text-slate-600 leading-relaxed">
-                                <span className="font-bold text-slate-800">"{userData.name}님, 고민하신 부위는 충분히 개선 가능합니다."</span>
-                                <br className="mb-2" />
-                                데이터 분석 결과, {userData.priority === '자연스러운 결과' ? '자연스럽고 안전한' : '회복이 빠르면서도 효과적인'} 솔루션이 적합해 보입니다. 내원 시 더 자세히 설명해드릴게요.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
                 {/* ========== Progress Timeline ========== */}
-                <div className="px-6 py-12 bg-white rounded-t-[2.5rem] shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)] mt-auto">
-                    <h3 className="text-lg font-bold text-slate-900 mb-8 text-center">진행 과정 안내</h3>
+                <div className="px-6 py-10 relative" style={{ background: 'rgba(0, 0, 0, 0.15)' }}>
+                    <h3 className="text-lg font-bold text-white mb-8 text-center">진행 과정</h3>
                     <div className="relative flex justify-between items-center px-4">
-                        {/* Connecting Line */}
-                        <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-100 -z-10 transform -translate-y-1/2 mx-8" />
-                        <div className="absolute top-1/2 left-0 w-1/2 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 -z-0 transform -translate-y-1/2 mx-8" />
+                        <div className="absolute top-1/2 left-8 right-8 h-0.5 -z-10 transform -translate-y-1/2" style={{ background: 'rgba(212, 184, 106, 0.3)' }} />
+                        <div className="absolute top-1/2 left-8 w-1/3 h-0.5 transform -translate-y-1/2" style={{ background: 'linear-gradient(90deg, #D4B86A, #F5D88E)' }} />
 
-                        {/* Step 1 */}
                         <div className="flex flex-col items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-200">
+                            <div className="w-10 h-10 rounded-full flex items-center justify-center shadow-lg" style={{ background: 'linear-gradient(135deg, #D4B86A, #F5D88E)', color: '#3D2E0F' }}>
                                 <CheckCircle size={20} />
                             </div>
-                            <span className="text-xs font-bold text-blue-600">접수완료</span>
+                            <span className="text-xs font-bold" style={{ color: '#D4B86A' }}>접수완료</span>
                         </div>
 
-                        {/* Step 2 */}
                         <div className="flex flex-col items-center gap-3">
                             <div className="relative">
                                 <motion.div
-                                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0, 0.5] }}
+                                    animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
                                     transition={{ repeat: Infinity, duration: 2 }}
-                                    className="absolute inset-0 bg-indigo-500 rounded-full"
+                                    className="absolute inset-0 rounded-full"
+                                    style={{ background: '#D4B86A' }}
                                 />
-                                <div className="w-10 h-10 relative rounded-full bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-200 z-10 border-4 border-white">
+                                <div className="w-10 h-10 relative rounded-full flex items-center justify-center shadow-lg z-10 border-2"
+                                    style={{ background: 'linear-gradient(135deg, #D4B86A, #F5D88E)', borderColor: '#F5D88E', color: '#3D2E0F' }}>
                                     <User size={18} />
                                 </div>
                             </div>
-                            <span className="text-xs font-bold text-indigo-600">배정중</span>
+                            <span className="text-xs font-bold" style={{ color: '#F5D88E' }}>배정중</span>
                         </div>
 
-                        {/* Step 3 */}
                         <div className="flex flex-col items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-400 border-4 border-white">
+                            <div className="w-10 h-10 rounded-full flex items-center justify-center border-2" style={{ background: 'rgba(212, 184, 106, 0.1)', borderColor: 'rgba(212, 184, 106, 0.3)', color: 'rgba(212, 184, 106, 0.5)' }}>
                                 <Clock size={18} />
                             </div>
-                            <span className="text-xs font-medium text-slate-400">해피콜</span>
+                            <span className="text-xs font-medium" style={{ color: 'rgba(212, 184, 106, 0.5)' }}>해피콜</span>
                         </div>
                     </div>
                 </div>
 
-                {/* ========== Benefits Bottom ========== */}
-                <div className="px-6 pb-8 bg-white">
-                    {/* Coupon Ticket */}
-                    <div className="relative mb-8 group cursor-pointer">
-                        <div className="bg-gradient-to-r from-pink-50 to-rose-50 border border-pink-100 rounded-xl p-5 flex items-center justify-between relative overflow-hidden">
-                            {/* Dashed line decoration */}
-                            <div className="absolute left-[-10px] top-1/2 -translate-y-1/2 w-5 h-5 bg-white rounded-full border-r border-pink-100" />
-                            <div className="absolute right-[-10px] top-1/2 -translate-y-1/2 w-5 h-5 bg-white rounded-full border-l border-pink-100" />
+                {/* ========== Bottom Buttons ========== */}
+                <div className="px-6 py-8" style={{ background: 'rgba(0, 0, 0, 0.2)' }}>
+                    {/* Coupon */}
+                    <div className="relative mb-6 rounded-xl p-4 flex items-center justify-between overflow-hidden"
+                        style={{ background: 'linear-gradient(135deg, rgba(212, 184, 106, 0.15), rgba(245, 216, 142, 0.1))', border: '1px solid rgba(212, 184, 106, 0.3)' }}>
+                        <div className="absolute left-[-8px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full" style={{ background: '#4A3C1A' }} />
+                        <div className="absolute right-[-8px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full" style={{ background: '#4A3C1A' }} />
 
-                            <div className="flex flex-col ml-3">
-                                <span className="text-xs font-bold text-rose-500 mb-1">SPECIAL GIFT</span>
-                                <span className="text-lg font-extrabold text-slate-800">AI 정밀 진단 무료권</span>
-                                <span className="text-[10px] text-slate-500 mt-1">상담 예약 시 자동 적용됩니다.</span>
-                            </div>
-                            <div className="bg-white p-2 rounded-full shadow-sm text-rose-500 mr-2">
-                                <Sparkles size={20} />
-                            </div>
+                        <div className="ml-2">
+                            <span className="text-[10px] font-bold" style={{ color: '#D4B86A' }}>SPECIAL GIFT</span>
+                            <p className="text-base font-extrabold text-white">AI 정밀 진단 무료권</p>
                         </div>
+                        <Sparkles size={24} style={{ color: '#D4B86A' }} />
                     </div>
 
                     {/* Buttons */}
                     <div className="flex gap-3">
                         <button
                             onClick={onRestart}
-                            className="flex-1 h-14 rounded-xl text-slate-600 border-2 border-slate-200 hover:bg-slate-50 font-bold text-base transition-colors"
+                            className="flex-1 h-14 rounded-xl font-bold text-base transition-colors"
+                            style={{ background: 'rgba(212, 184, 106, 0.1)', border: '2px solid rgba(212, 184, 106, 0.4)', color: '#D4B86A' }}
                         >
                             처음으로
                         </button>
                         <a
                             href="tel:1661-8581"
-                            className="flex-[2] h-14 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg shadow-blue-200 font-bold text-lg flex items-center justify-center transition-all"
+                            className="flex-[2] h-14 rounded-xl shadow-lg font-bold text-lg flex items-center justify-center transition-all hover:opacity-90"
+                            style={{
+                                background: 'linear-gradient(135deg, #D4B86A 0%, #F5D88E 50%, #D4B86A 100%)',
+                                color: '#3D2E0F',
+                                boxShadow: '0 8px 24px rgba(212, 184, 106, 0.4)'
+                            }}
                         >
                             상담 연결하기
                         </a>
@@ -375,7 +486,7 @@ export const Step6Result: React.FC<Props> = ({ userData, onRestart }) => {
 
             </div>
 
-            {/* ========== Review Modal ========== */}
+            {/* Review Modal */}
             <ReviewModal
                 review={selectedReview}
                 onClose={() => setSelectedReview(null)}

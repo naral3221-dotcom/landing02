@@ -37,18 +37,18 @@ export const Step4Question: React.FC<Props> = ({ onNext, defaultValues }) => {
             <div className="text-center mb-10 space-y-4">
                 {/* 신뢰 뱃지 */}
                 <div className="flex items-center justify-center gap-2 mb-2">
-                    <div className="px-3 py-1 bg-green-50 border border-green-200 rounded-full text-xs font-bold text-green-700 flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                    <div className="px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1" style={{ backgroundColor: 'rgba(212, 184, 106, 0.15)', border: '1px solid rgba(212, 184, 106, 0.3)', color: '#8B7355' }}>
+                        <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: '#C9A962' }} />
                         실시간 AI 분석
                     </div>
-                    <div className="px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-xs font-bold text-blue-700">
+                    <div className="px-3 py-1 rounded-full text-xs font-bold" style={{ backgroundColor: 'rgba(212, 184, 106, 0.15)', border: '1px solid rgba(212, 184, 106, 0.3)', color: '#8B7355' }}>
                         STEP 4 OF 5
                     </div>
                 </div>
 
                 <h3 className="text-xl md:text-2xl font-bold text-slate-900">
                     마지막으로 <br className="md:hidden" />
-                    <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">두 가지만 더 확인해주세요</span>
+                    <span style={{ background: 'linear-gradient(90deg, #8B7355, #C9A962)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', color: 'transparent' }}>두 가지만 더 확인해주세요</span>
                 </h3>
                 <p className="text-slate-500 text-sm max-w-md mx-auto">
                     과거 시술 이력을 알면 더 정확한 예측이 가능합니다.
@@ -59,7 +59,7 @@ export const Step4Question: React.FC<Props> = ({ onNext, defaultValues }) => {
                 {/* Q1. 윤곽수술 경험 여부 */}
                 <div className="space-y-4">
                     <div className="flex items-center gap-2">
-                        <span className="bg-blue-100 text-blue-600 text-xs font-bold px-2 py-1 rounded">Q1</span>
+                        <span className="text-xs font-bold px-2 py-1 rounded" style={{ backgroundColor: 'rgba(212, 184, 106, 0.2)', color: '#8B7355' }}>Q1</span>
                         <label className="text-lg font-bold text-slate-800">과거 윤곽수술을 하셨나요?</label>
                     </div>
 
@@ -69,10 +69,11 @@ export const Step4Question: React.FC<Props> = ({ onNext, defaultValues }) => {
                             className={`
                                 flex-1 py-4 rounded-xl font-bold border-2 transition-all duration-200
                                 ${hasContouringExp === true
-                                    ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-sm'
-                                    : 'border-slate-100 bg-white text-slate-400 hover:border-blue-200 hover:bg-slate-50'
+                                    ? 'shadow-sm'
+                                    : 'border-slate-100 bg-white text-slate-400 hover:bg-slate-50'
                                 }
                             `}
+                            style={hasContouringExp === true ? { borderColor: '#C9A962', backgroundColor: 'rgba(212, 184, 106, 0.1)', color: '#8B7355' } : {}}
                         >
                             네, 했어요
                         </button>
@@ -81,10 +82,11 @@ export const Step4Question: React.FC<Props> = ({ onNext, defaultValues }) => {
                             className={`
                                 flex-1 py-4 rounded-xl font-bold border-2 transition-all duration-200
                                 ${hasContouringExp === false
-                                    ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-sm'
-                                    : 'border-slate-100 bg-white text-slate-400 hover:border-blue-200 hover:bg-slate-50'
+                                    ? 'shadow-sm'
+                                    : 'border-slate-100 bg-white text-slate-400 hover:bg-slate-50'
                                 }
                             `}
+                            style={hasContouringExp === false ? { borderColor: '#C9A962', backgroundColor: 'rgba(212, 184, 106, 0.1)', color: '#8B7355' } : {}}
                         >
                             아니요
                         </button>
@@ -107,7 +109,7 @@ export const Step4Question: React.FC<Props> = ({ onNext, defaultValues }) => {
                 {/* Q2. 우선순위 선택 (UI 수정됨) */}
                 <div className="space-y-4">
                     <div className="flex items-center gap-2">
-                        <span className="bg-blue-100 text-blue-600 text-xs font-bold px-2 py-1 rounded">Q2</span>
+                        <span className="text-xs font-bold px-2 py-1 rounded" style={{ backgroundColor: 'rgba(212, 184, 106, 0.2)', color: '#8B7355' }}>Q2</span>
                         <label className="text-lg font-bold text-slate-800">가장 중요하게 생각하는 점은?</label>
                     </div>
 
@@ -119,18 +121,21 @@ export const Step4Question: React.FC<Props> = ({ onNext, defaultValues }) => {
                                 className={`
                                     w-full text-left px-5 py-4 rounded-2xl border-2 transition-all flex items-center gap-3 group
                                     ${priority === item
-                                        ? 'border-blue-500 bg-blue-50 text-blue-900 font-bold shadow-md'
-                                        : 'border-slate-100 bg-white text-slate-500 hover:border-blue-200 hover:bg-slate-50'
+                                        ? 'font-bold shadow-md'
+                                        : 'border-slate-100 bg-white text-slate-500 hover:bg-slate-50'
                                     }
                                 `}
+                                style={priority === item ? { borderColor: '#C9A962', backgroundColor: 'rgba(212, 184, 106, 0.1)', color: '#5C4A1F' } : {}}
                             >
                                 <div className={`
                                     shrink-0 w-5 h-5 rounded-full flex items-center justify-center border transition-all
                                     ${priority === item
-                                        ? 'bg-blue-500 border-blue-500 text-white'
-                                        : 'bg-slate-100 border-slate-200 text-transparent group-hover:border-blue-200'
+                                        ? 'text-white'
+                                        : 'bg-slate-100 border-slate-200 text-transparent group-hover:border-slate-300'
                                     }
-                                `}>
+                                `}
+                                    style={priority === item ? { backgroundColor: '#C9A962', borderColor: '#C9A962' } : {}}
+                                >
                                     <Check className="w-3 h-3" strokeWidth={3} />
                                 </div>
                                 <span className="break-keep leading-snug flex-1">{item}</span>
@@ -148,13 +153,14 @@ export const Step4Question: React.FC<Props> = ({ onNext, defaultValues }) => {
                     className={`
                         w-full py-4 rounded-full font-bold text-lg transition-all shadow-lg flex items-center justify-center gap-2 relative overflow-hidden group
                         ${isValid
-                            ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white hover:shadow-2xl hover:scale-105 transform'
+                            ? 'text-white hover:shadow-2xl hover:scale-105 transform'
                             : 'bg-slate-100 text-slate-400 border-2 border-slate-200 cursor-not-allowed'
                         }
                     `}
+                    style={isValid ? { background: 'linear-gradient(135deg, #8B7355 0%, #C9A962 100%)', boxShadow: '0 10px 30px -5px rgba(139, 115, 85, 0.4)' } : {}}
                 >
                     {isValid && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: 'linear-gradient(135deg, rgba(201, 169, 98, 0.2), rgba(139, 115, 85, 0.2))' }} />
                     )}
                     <span className="relative z-10">내 맞춤 결과 분석하기</span>
                 </button>

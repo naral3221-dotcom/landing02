@@ -53,19 +53,19 @@ export const Step5Analysis: React.FC<Props> = ({ userName, onNext }) => {
             <div className="w-full max-w-xl mx-auto py-12 flex flex-col items-center justify-center animate-fadeIn">
                 {/* 신뢰 뱃지 */}
                 <div className="flex items-center justify-center gap-2 mb-8">
-                    <div className="px-3 py-1 bg-green-50 border border-green-200 rounded-full text-xs font-bold text-green-700 flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                    <div className="px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1" style={{ backgroundColor: 'rgba(212, 184, 106, 0.15)', border: '1px solid rgba(212, 184, 106, 0.3)', color: '#8B7355' }}>
+                        <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: '#C9A962' }} />
                         AI 분석 진행중
                     </div>
-                    <div className="px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-xs font-bold text-blue-700">
+                    <div className="px-3 py-1 rounded-full text-xs font-bold" style={{ backgroundColor: 'rgba(212, 184, 106, 0.15)', border: '1px solid rgba(212, 184, 106, 0.3)', color: '#8B7355' }}>
                         STEP 5 OF 5
                     </div>
                 </div>
 
                 <div className="relative mb-8">
                     {/* 돌아가는 로딩 아이콘 */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-400 blur-xl opacity-20 rounded-full animate-pulse" />
-                    <Loader2 className="w-16 h-16 text-blue-600 animate-spin relative z-10" />
+                    <div className="absolute inset-0 blur-xl opacity-20 rounded-full animate-pulse" style={{ background: 'linear-gradient(135deg, #8B7355, #C9A962)' }} />
+                    <Loader2 className="w-16 h-16 animate-spin relative z-10" style={{ color: '#C9A962' }} />
                 </div>
 
                 <h3 className="text-xl font-bold text-slate-900 mb-2">
@@ -78,8 +78,8 @@ export const Step5Analysis: React.FC<Props> = ({ userName, onNext }) => {
                 {/* 프로그레스 바 */}
                 <div className="w-full max-w-xs h-2 bg-slate-100 rounded-full overflow-hidden shadow-inner">
                     <div
-                        className="h-full bg-gradient-to-r from-blue-600 to-cyan-500 transition-all duration-300 ease-out shadow-sm"
-                        style={{ width: `${progress}%` }}
+                        className="h-full transition-all duration-300 ease-out shadow-sm"
+                        style={{ width: `${progress}%`, background: 'linear-gradient(135deg, #8B7355 0%, #C9A962 100%)' }}
                     />
                 </div>
             </div>
@@ -92,13 +92,13 @@ export const Step5Analysis: React.FC<Props> = ({ userName, onNext }) => {
 
             {/* 1. 상단 메시지 */}
             <div className="text-center mb-8">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold mb-4">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold mb-4" style={{ backgroundColor: 'rgba(212, 184, 106, 0.2)', color: '#8B7355' }}>
                     <Check size={12} strokeWidth={4} />
                     분석 완료
                 </div>
                 <h2 className="text-2xl md:text-3xl font-bold text-slate-900 leading-tight">
-                    <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">{userName}</span>님에게 딱 맞는<br />
-                    <span className="underline decoration-blue-200 decoration-4 underline-offset-4">
+                    <span style={{ background: 'linear-gradient(90deg, #8B7355, #C9A962)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', color: 'transparent' }}>{userName}</span>님에게 딱 맞는<br />
+                    <span className="underline decoration-4 underline-offset-4" style={{ textDecorationColor: 'rgba(201, 169, 98, 0.4)' }}>
                         BEST 성공 사례
                     </span>를 찾았습니다.
                 </h2>
@@ -159,13 +159,14 @@ export const Step5Analysis: React.FC<Props> = ({ userName, onNext }) => {
                     className={`
             w-full mt-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all relative overflow-hidden group
             ${isAgreed
-                            ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg hover:shadow-2xl hover:scale-105 transform'
+                            ? 'text-white shadow-lg hover:shadow-2xl hover:scale-105 transform'
                             : 'bg-slate-100 text-slate-400 border-2 border-slate-200 cursor-not-allowed'
                         }
           `}
+                    style={isAgreed ? { background: 'linear-gradient(135deg, #8B7355 0%, #C9A962 100%)', boxShadow: '0 10px 30px -5px rgba(139, 115, 85, 0.4)' } : {}}
                 >
                     {isAgreed && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: 'linear-gradient(135deg, rgba(201, 169, 98, 0.2), rgba(139, 115, 85, 0.2))' }} />
                     )}
                     <span className="relative z-10 flex items-center gap-2">
                         {isAgreed ? (
