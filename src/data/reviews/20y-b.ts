@@ -9,16 +9,16 @@ export const REVIEWS_20Y_B: ReviewData[] = [
         tags: ['이중턱/턱선'],
         content: `<box>✅시술 전</box>
 <grid>
-public\\match\\20y\\b  type\\7\\7-b- (1).jpg
-public\\match\\20y\\b  type\\7\\7-b- (2).jpg
+public\\match\\20y\\b  type\\7\\7-b- (1).webp
+public\\match\\20y\\b  type\\7\\7-b- (2).webp
 </grid>
 
 <box>✅시술 후</box>
 <grid>
-public\\match\\20y\\b  type\\7\\7-a- (3).jpg
-public\\match\\20y\\b  type\\7\\7-a- (4).jpg
+public\\match\\20y\\b  type\\7\\7-a- (3).webp
+public\\match\\20y\\b  type\\7\\7-a- (4).webp
 </grid>
-public\\match\\20y\\b  type\\7\\7-a- (2).jpg
+public\\match\\20y\\b  type\\7\\7-a- (2).webp
 
 <title>• 시술 선택 이유</title>
 평소에 턱선이 둔하고 이중턱이 잘 생기는 편이라
@@ -45,7 +45,7 @@ public\\match\\20y\\b  type\\7\\7-a- (2).jpg
 비교 사진을 찍어봤는데
 <b>턱선이 정리되면서 투턱 느낌이 확실히 줄어든 게</b>
 사진으로도 바로 느껴졌어요.
-public\\match\\20y\\b  type\\7\\7-a- (1).jpg
+public\\match\\20y\\b  type\\7\\7-a- (1).webp
 전에는 붓기가 적은 날에도
 셀카 찍으면 이중턱이 보여서 스트레스였는데,
 지금은 같은 각도로 찍어도
@@ -73,14 +73,14 @@ public\\match\\20y\\b  type\\7\\7-a- (1).jpg
         content: `---ID 8---
 <box>✅시술 전</box>
 <grid>
-public\\match\\20y\\b  type\\8\\8-b- (2).jpg
-public\\match\\20y\\b  type\\8\\8-b- (1).jpg
+public\\match\\20y\\b  type\\8\\8-b- (2).webp
+public\\match\\20y\\b  type\\8\\8-b- (1).webp
 </grid>
 
 <box>✅시술 후</box>
 <grid>
-public\\match\\20y\\b  type\\8\\8-a- (1).jpg
-public\\match\\20y\\b  type\\8\\8-a- (2).jpg
+public\\match\\20y\\b  type\\8\\8-a- (1).webp
+public\\match\\20y\\b  type\\8\\8-a- (2).webp
 </grid>
 
 <title>• 시술 선택 이유</title>
@@ -113,8 +113,8 @@ public\\match\\20y\\b  type\\8\\8-a- (2).jpg
 턱선이 또렷해 보이니까
 얼굴 전체 인상이 훨씬 깔끔해 보이더라구요.
 <grid>
-public\\match\\20y\\b  type\\8\\8-a- (5).jpg
-public\\match\\20y\\b  type\\8\\8-a- (4).jpg
+public\\match\\20y\\b  type\\8\\8-a- (5).webp
+public\\match\\20y\\b  type\\8\\8-a- (4).webp
 </grid>
 
 에프터 셀카를 찍어봐도

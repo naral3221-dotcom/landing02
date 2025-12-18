@@ -10,23 +10,23 @@ export const REVIEWS_50Y_AB: ReviewData[] = [
         content: `---ID 26---
 <box>✅시술 전</box>
 <grid>
-public\\match\\50y\\ab\\26\\26-b-03.png
-public\\match\\50y\\ab\\26\\26-b-01.png
-public\\match\\50y\\ab\\26\\26-b-02.png
+public\\match\\50y\\ab\\26\\26-b-03.webp
+public\\match\\50y\\ab\\26\\26-b-01.webp
+public\\match\\50y\\ab\\26\\26-b-02.webp
 </grid>
 
 <box>✅시술 후 (2주차)</box>
 <grid>
-public\\match\\50y\\ab\\26\\26-a-02.png
-public\\match\\50y\\ab\\26\\26-a-03.png
-public\\match\\50y\\ab\\26\\26-a-01.png
+public\\match\\50y\\ab\\26\\26-a-02.webp
+public\\match\\50y\\ab\\26\\26-a-03.webp
+public\\match\\50y\\ab\\26\\26-a-01.webp
 </grid>
 
 <box>✅시술 후 (4주차)</box>
 <grid>
-public\\match\\50y\\ab\\26\\26-a-06.png
-public\\match\\50y\\ab\\26\\26-a-04.png
-public\\match\\50y\\ab\\26\\26-a-05.png
+public\\match\\50y\\ab\\26\\26-a-06.webp
+public\\match\\50y\\ab\\26\\26-a-04.webp
+public\\match\\50y\\ab\\26\\26-a-05.webp
 </grid>
 
 <title>• 시술 선택 이유</title>
@@ -86,16 +86,16 @@ public\\match\\50y\\ab\\26\\26-a-05.png
         content: `---ID 27---
 <box>✅시술 전</box>
 <grid>
-public\\match\\50y\\ab\\27\\27-b01.png
-public\\match\\50y\\ab\\27\\27-b02.png
-public\\match\\50y\\ab\\27\\27-b03.png
+public\\match\\50y\\ab\\27\\27-b01.webp
+public\\match\\50y\\ab\\27\\27-b02.webp
+public\\match\\50y\\ab\\27\\27-b03.webp
 </grid>
 
 <box>✅시술 후</box>
 <grid>
-public\\match\\50y\\ab\\27\\27-a-03.png
-public\\match\\50y\\ab\\27\\27-a-01.png
-public\\match\\50y\\ab\\27\\27-a-02.png
+public\\match\\50y\\ab\\27\\27-a-03.webp
+public\\match\\50y\\ab\\27\\27-a-01.webp
+public\\match\\50y\\ab\\27\\27-a-02.webp
 </grid>
 
 <title>• 시술 선택 이유</title>
@@ -162,16 +162,16 @@ public\\match\\50y\\ab\\27\\27-a-02.png
         content: `---ID 28---
 <box>✅시술 전</box>
 <grid>
-public\\match\\50y\\ab\\28\\28-b-03.png
-public\\match\\50y\\ab\\28\\28-b-01.png
-public\\match\\50y\\ab\\28\\28-b-02.png
+public\\match\\50y\\ab\\28\\28-b-03.webp
+public\\match\\50y\\ab\\28\\28-b-01.webp
+public\\match\\50y\\ab\\28\\28-b-02.webp
 </grid>
 
 <box>✅시술 후</box>
 <grid>
-public\\match\\50y\\ab\\28\\28-a-01.png
-public\\match\\50y\\ab\\28\\28-a-02.png
-public\\match\\50y\\ab\\28\\28-a-03.png
+public\\match\\50y\\ab\\28\\28-a-01.webp
+public\\match\\50y\\ab\\28\\28-a-02.webp
+public\\match\\50y\\ab\\28\\28-a-03.webp
 </grid>
 
 <title>• 시술 선택 이유</title>

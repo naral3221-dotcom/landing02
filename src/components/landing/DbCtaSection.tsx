@@ -1,5 +1,36 @@
 import { motion } from 'motion/react';
-import { Sparkles, Scan, CheckCircle2 } from 'lucide-react';
+import { Sparkles, Scan } from 'lucide-react';
+
+const GlowingCheckIcon = () => (
+  <div className="relative shrink-0 w-6 h-6">
+    <div
+      className="absolute inset-0 rounded-full blur-md opacity-70"
+      style={{ background: 'radial-gradient(circle, #FDFBCE 0%, #F5D88E 50%, transparent 70%)' }}
+    />
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="url(#goldGradient)"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="relative z-10"
+    >
+      <defs>
+        <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FDFBCE" />
+          <stop offset="50%" stopColor="#F5D88E" />
+          <stop offset="100%" stopColor="#E8C86B" />
+        </linearGradient>
+      </defs>
+      <circle cx="12" cy="12" r="10" />
+      <path d="m9 12 2 2 4-4" />
+    </svg>
+  </div>
+);
 
 /* ============================================================================
    DB CTA SECTION
@@ -40,7 +71,8 @@ export const DbCtaSection = ({ onScrollToForm }: DbCtaProps) => {
         <motion.div
           animate={{ scale: [1, 1.05, 1] }}
           transition={{ repeat: Infinity, duration: 2 }}
-          className="inline-flex items-center gap-2 bg-white/20 text-white px-8 py-3 rounded-full font-bold mb-8 border border-white/30 backdrop-blur-md text-lg shadow-sm"
+          className="inline-flex items-center gap-2 bg-white/20 text-white px-8 py-3 rounded-full font-extrabold mb-8 border-2 backdrop-blur-md text-lg shadow-sm"
+          style={{ borderColor: '#F6F8EA' }}
         >
           <Sparkles size={24} className="shrink-0" style={{ color: '#F5D88E' }} />
           <span className="drop-shadow-sm">내 케이스 AI 매칭 시스템</span>
@@ -62,9 +94,10 @@ export const DbCtaSection = ({ onScrollToForm }: DbCtaProps) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="flex items-center gap-4 bg-white/10 border border-white/20 rounded-xl p-4 backdrop-blur-sm hover:bg-white/20 transition-colors text-left"
+              className="flex items-center gap-4 bg-white/10 border-2 rounded-xl p-4 backdrop-blur-sm hover:bg-white/20 transition-colors text-left"
+              style={{ borderColor: '#F6F8EA' }}
             >
-              <CheckCircle2 className="shrink-0 w-6 h-6" style={{ color: '#F5D88E' }} />
+              <GlowingCheckIcon />
               <span className="text-white font-bold text-base tracking-tight">{point}</span>
             </motion.div>
           ))}

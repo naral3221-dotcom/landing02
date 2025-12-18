@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
+import { Sparkles, Check } from 'lucide-react';
 
 // 컴포넌트들
 import { Step1NamePhone, Step1Data } from './steps/Step1NamePhone';
@@ -123,57 +125,84 @@ export const AiMatchingSystem: React.FC = () => {
     >
 
       {/* ================================================================
-          STEP INDICATOR
+          AI STEP INDICATOR - 칩 + 타이핑 스타일
           ================================================================ */}
       {step <= TOTAL_STEPS && (
-        <div className="mb-8 px-2">
+        <div className="mb-6">
 
-          {/* --- Title --- */}
-          <h2 className="text-center text-sm font-bold text-slate-800 uppercase tracking-widest mb-4">
-            AI Matching Process
-          </h2>
-
-          {/* --- Step Navigation --- */}
-          <div className="flex items-center justify-between gap-1 mb-3 overflow-x-auto hide-scrollbar">
-            {STEP_INFO.map((item, index) => {
+          {/* --- 가로 칩 버튼들 --- */}
+          <div className="flex gap-1.5 mb-4 overflow-x-auto hide-scrollbar pb-1">
+            {STEP_INFO.map((item) => {
               const isActive = step === item.num;
               const isCompleted = step > item.num;
 
               return (
-                <div key={item.num} className="flex items-center flex-1 min-w-0">
-                  {/* Step Item */}
-                  <div className={`
-                    flex flex-col items-center flex-1 py-2 px-1 rounded-lg transition-all duration-300
-                    ${isActive ? 'bg-slate-900 text-white scale-105 shadow-lg' : ''}
-                    ${isCompleted ? 'bg-emerald-50 text-emerald-600' : ''}
-                    ${!isActive && !isCompleted ? 'bg-slate-50 text-slate-400' : ''}
-                  `}>
-                    <span className={`text-[10px] font-bold ${isActive ? 'text-slate-300' : ''}`}>
-                      STEP {item.num}
+                <motion.div
+                  key={item.num}
+                  animate={{ scale: isActive ? 1.02 : 1 }}
+                  className={`
+                    flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-300 shrink-0
+                    ${isActive ? 'bg-slate-900 text-white shadow-lg' : ''}
+                    ${isCompleted ? 'bg-emerald-100 text-emerald-700' : ''}
+                    ${!isActive && !isCompleted ? 'bg-slate-100 text-slate-400' : ''}
+                  `}
+                >
+                  {isCompleted ? (
+                    <Check size={12} strokeWidth={3} />
+                  ) : (
+                    <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-black
+                      ${isActive ? 'bg-white/20' : 'bg-slate-200/50'}
+                    `}>
+                      {item.num}
                     </span>
-                    <span className={`text-xs font-bold mt-0.5 truncate max-w-full ${isCompleted ? 'text-emerald-600' : ''}`}>
-                      {isCompleted ? '✓ ' : ''}{item.title}
-                    </span>
-                  </div>
-
-                  {/* Connector Line (마지막 제외) */}
-                  {index < 4 && (
-                    <div className={`w-2 h-0.5 flex-shrink-0 transition-colors duration-300 ${
-                      isCompleted ? 'bg-emerald-300' : 'bg-slate-200'
-                    }`} />
                   )}
-                </div>
+                  <span>{item.title}</span>
+                </motion.div>
               );
             })}
           </div>
 
-          {/* --- Progress Bar --- */}
-          <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-slate-800 to-slate-600 transition-all duration-500 ease-out"
-              style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
+          {/* --- AI 타이핑 상태 표시 --- */}
+          <div className="flex items-center gap-3 px-1">
+            <div className="flex items-center gap-2">
+              <div className="relative">
+                <Sparkles size={14} className="text-amber-500" />
+              </div>
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={step}
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -5 }}
+                  className="text-sm text-slate-600"
+                >
+                  {step === 1 && 'AI 매칭을 위한 기본 정보를 입력해주세요'}
+                  {step === 2 && '정확한 매칭을 위해 연령대를 선택해주세요'}
+                  {step === 3 && '개선하고 싶은 부위를 선택해주세요'}
+                  {step === 4 && '맞춤 분석을 위한 추가 정보를 입력해주세요'}
+                  {step === 5 && 'AI가 최적의 케이스를 분석하고 있습니다'}
+                  <motion.span
+                    animate={{ opacity: [1, 0, 1] }}
+                    transition={{ duration: 1, repeat: Infinity }}
+                    className="inline-block ml-0.5"
+                  >
+                    _
+                  </motion.span>
+                </motion.span>
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* --- 미니 프로그레스 --- */}
+          <div className="mt-3 h-1 bg-slate-100 rounded-full overflow-hidden">
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              className="h-full bg-gradient-to-r from-slate-700 to-slate-500 rounded-full"
             />
           </div>
+
         </div>
       )}
 

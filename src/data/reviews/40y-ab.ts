@@ -10,16 +10,16 @@ export const REVIEWS_40Y_AB: ReviewData[] = [
         content: `---ID 21---
 <box>✅시술 전</box>
 <grid>
-public\\match\\40y\\ab type\\21\\21-b-01.png
-public\\match\\40y\\ab type\\21\\21-b-02.png
-public\\match\\40y\\ab type\\21\\21-b-03.png
+public\\match\\40y\\ab type\\21\\21-b-01.webp
+public\\match\\40y\\ab type\\21\\21-b-02.webp
+public\\match\\40y\\ab type\\21\\21-b-03.webp
 </grid>
 
 <box>✅시술 후</box>
 <grid>
-public\\match\\40y\\ab type\\21\\21-a-03.png
-public\\match\\40y\\ab type\\21\\21-a-01.png
-public\\match\\40y\\ab type\\21\\21-a-02.png
+public\\match\\40y\\ab type\\21\\21-a-03.webp
+public\\match\\40y\\ab type\\21\\21-a-01.webp
+public\\match\\40y\\ab type\\21\\21-a-02.webp
 </grid>
 
 <title>• 시술 선택 이유</title>
@@ -41,8 +41,8 @@ public\\match\\40y\\ab type\\21\\21-a-02.png
 인상이 훨씬 또렷해진 느낌이었어요.
 
 <grid>
-public\\match\\40y\\ab type\\21\\21-a-05.png
-public\\match\\40y\\ab type\\21\\21-a-04.png
+public\\match\\40y\\ab type\\21\\21-a-05.webp
+public\\match\\40y\\ab type\\21\\21-a-04.webp
 </grid>
 
 솔직히 체감상으로는
@@ -70,20 +70,20 @@ public\\match\\40y\\ab type\\21\\21-a-04.png
         content: `---ID 22---
 <box>✅시술 전</box>
 <grid>
-public\\match\\40y\\ab type\\22\\22-b-05.png
-public\\match\\40y\\ab type\\22\\22-b-01.png
-public\\match\\40y\\ab type\\22\\22-b-02.png
-public\\match\\40y\\ab type\\22\\22-b-03.png
-public\\match\\40y\\ab type\\22\\22-b-04.png
+public\\match\\40y\\ab type\\22\\22-b-05.webp
+public\\match\\40y\\ab type\\22\\22-b-01.webp
+public\\match\\40y\\ab type\\22\\22-b-02.webp
+public\\match\\40y\\ab type\\22\\22-b-03.webp
+public\\match\\40y\\ab type\\22\\22-b-04.webp
 </grid>
 
 <box>✅시술 후</box>
 <grid>
-public\\match\\40y\\ab type\\22\\22-a-05.png
-public\\match\\40y\\ab type\\22\\22-a-01.png
-public\\match\\40y\\ab type\\22\\22-a-02.png
-public\\match\\40y\\ab type\\22\\22-a-03.png
-public\\match\\40y\\ab type\\22\\22-a-04.png
+public\\match\\40y\\ab type\\22\\22-a-05.webp
+public\\match\\40y\\ab type\\22\\22-a-01.webp
+public\\match\\40y\\ab type\\22\\22-a-02.webp
+public\\match\\40y\\ab type\\22\\22-a-03.webp
+public\\match\\40y\\ab type\\22\\22-a-04.webp
 </grid>
 
 <title>• 시술 선택 이유</title>

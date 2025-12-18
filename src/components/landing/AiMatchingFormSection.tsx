@@ -1,6 +1,7 @@
 import { forwardRef } from 'react';
 import { motion } from 'motion/react';
 import { AiMatchingSystem } from '../matching';
+import { FileCheck, Users, Activity, MessageCircle } from 'lucide-react';
 
 /* ============================================================================
    AI MATCHING FORM SECTION
@@ -9,67 +10,99 @@ import { AiMatchingSystem } from '../matching';
    - 모바일 전용 (430px)
    ============================================================================ */
 
+/* ========== StatBox Component ========== */
+const StatBox = ({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) => (
+  <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm flex flex-col gap-1 items-center text-center hover:border-[#C9A962]/30 transition-colors">
+    <div className="bg-[#f8f5f2] p-1.5 rounded-lg mb-1">
+      {icon}
+    </div>
+    <div className="font-bold text-[#1e293b] text-sm">{value}</div>
+    <div className="text-[11px] text-slate-500 font-medium">{label}</div>
+  </div>
+);
+
 export const AiMatchingFormSection = forwardRef<HTMLElement>((_, ref) => {
   return (
-    <section ref={ref} className="py-12 relative overflow-hidden bg-slate-50">
+    <section ref={ref} className="py-12 relative overflow-hidden bg-[#F8F9FA]">
 
       {/* ========== Background Effects ========== */}
       <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom right, #FFFEF7, rgba(212, 184, 106, 0.05), #F8F6F0)' }} />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(180,150,80,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(180,150,80,0.03)_1px,transparent_1px)] bg-[size:40px_40px] opacity-30" />
-      <div className="absolute top-1/4 left-1/4 w-[250px] h-[250px] rounded-full blur-[100px] pointer-events-none animate-pulse" style={{ backgroundColor: 'rgba(212, 184, 106, 0.1)' }} />
-      <div className="absolute bottom-1/4 right-1/4 w-[200px] h-[200px] rounded-full blur-[80px] pointer-events-none animate-pulse" style={{ backgroundColor: 'rgba(180, 150, 80, 0.08)', animationDelay: '1s' }} />
 
       {/* ========== Content ========== */}
       <div className="px-4 relative z-10">
+
+        {/* --- Top Spacer --- */}
+        <div className="h-8" aria-hidden="true" />
+
+        {/* --- Live Status Badge --- */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex justify-center mb-4"
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#1e293b]/5 border border-[#1e293b]/10">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C9A962] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#C9A962]"></span>
+            </span>
+            <span className="text-xs font-bold text-[#1e293b]">현재 실시간 분석 시스템 가동 중</span>
+          </div>
+        </motion.div>
 
         {/* --- Header Text --- */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-8"
+          className="text-center mb-6"
         >
-          <h2 className="text-2xl font-bold leading-tight break-words text-slate-900 mb-4">
-            정확한 CASE 매칭을 위해 <br />
-            <span style={{ background: 'linear-gradient(90deg, #8B7355, #C9A962)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', color: 'transparent' }}>정보를 입력해주세요</span>
+          <h2 className="text-2xl font-bold text-[#1e293b] leading-[1.3] tracking-tight mb-3">
+            정확한 <span className="text-[#8B7355]">CASE 매칭</span>을 위해<br />
+            정보를 입력해주세요
           </h2>
 
-          <p className="text-slate-500 text-sm break-keep leading-relaxed">
-            <strong className="text-slate-700">빅데이터 기반 AI 시스템</strong>이<br />
-            가장 유사한 <strong className="text-slate-700">성공 사례</strong>를 찾아드립니다.
+          <p className="text-sm text-slate-500 leading-relaxed">
+            빅데이터 기반 AI 시스템이 고객님과 가장 유사한<br />
+            성공 사례를 1:1로 찾아드립니다.
           </p>
         </motion.div>
 
-        {/* --- Stats --- */}
+        {/* --- Stats Grid (Figma Style) --- */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="grid grid-cols-2 gap-3 mb-6"
+          className="grid grid-cols-2 gap-3 mb-8"
         >
-          <div className="bg-white/60 backdrop-blur-sm rounded-xl p-3 shadow-sm text-center" style={{ border: '1px solid rgba(212, 184, 106, 0.3)' }}>
-            <div className="text-xl font-bold" style={{ color: '#8B7355' }}>1,247+</div>
-            <div className="text-xs text-slate-500">누적 매칭 성공</div>
-          </div>
-          <div className="bg-white/60 backdrop-blur-sm rounded-xl p-3 shadow-sm text-center" style={{ border: '1px solid rgba(212, 184, 106, 0.3)' }}>
-            <div className="text-xl font-bold" style={{ color: '#C9A962' }}>98.2%</div>
-            <div className="text-xs text-slate-500">만족도</div>
-          </div>
-        </motion.div>
-
-        {/* --- Live Status --- */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex items-center justify-center gap-2 text-sm text-slate-400 mb-6"
-        >
-          <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: '#C9A962' }} />
-          현재 실시간 분석 시스템 가동 중
+          <StatBox
+            icon={<FileCheck className="w-4 h-4 text-[#8B7355]" />}
+            value="1,247+"
+            label="누적 매칭 성공"
+          />
+          <StatBox
+            icon={<Users className="w-4 h-4 text-[#8B7355]" />}
+            value="98.2%"
+            label="고객 만족도"
+          />
+          <StatBox
+            icon={<Activity className="w-4 h-4 text-[#8B7355]" />}
+            value="12,678+"
+            label="누적 시술건수"
+          />
+          <StatBox
+            icon={<MessageCircle className="w-4 h-4 text-[#8B7355]" />}
+            value="37,975+"
+            label="누적 상담건수"
+          />
         </motion.div>
 
         {/* --- AI Matching Form Component --- */}
         <AiMatchingSystem />
+
+        {/* --- Bottom Spacer (Footer와의 간격) --- */}
+        <div className="h-8" aria-hidden="true" />
 
       </div>
     </section>

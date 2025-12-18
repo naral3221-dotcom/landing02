@@ -10,15 +10,15 @@ export const REVIEWS_20Y_AB: ReviewData[] = [
         memo: ['contouring'],
         content: `<box>✅시술 전</box>
 <grid>
-public\\match\\20y\\ab type\\4\\4-b-3.jpg
-public\\match\\20y\\ab type\\4\\4-b-1.jpg
-public\\match\\20y\\ab type\\4\\4-b-2.jpg
+public\\match\\20y\\ab type\\4\\4-b-3.webp
+public\\match\\20y\\ab type\\4\\4-b-1.webp
+public\\match\\20y\\ab type\\4\\4-b-2.webp
 </grid>
 
 <box>✅시술 후</box>
 <grid>
-public\\match\\20y\\ab type\\4\\4-a-1.jpg
-public\\match\\20y\\ab type\\4\\4-a-2.jpg
+public\\match\\20y\\ab type\\4\\4-a-1.webp
+public\\match\\20y\\ab type\\4\\4-a-2.webp
 </grid>
 
 <title>• 시술 선택 이유</title>
@@ -65,16 +65,16 @@ public\\match\\20y\\ab type\\4\\4-a-2.jpg
         tags: ['볼처짐/긴중안부', '이중턱/턱선', '얼굴전체'],
         content: `<box>✅시술 전</box>
 <grid>
-public\\match\\20y\\ab type\\5\\5-b-1.jpg
-public\\match\\20y\\ab type\\5\\5-b-2.jpg
-public\\match\\20y\\ab type\\5\\5-b-3.jpg
+public\\match\\20y\\ab type\\5\\5-b-1.webp
+public\\match\\20y\\ab type\\5\\5-b-2.webp
+public\\match\\20y\\ab type\\5\\5-b-3.webp
 </grid>
 
 <box>✅시술 후</box>
 <grid>
-public\\match\\20y\\ab type\\5\\5-a-3.jpg
-public\\match\\20y\\ab type\\5\\5-a-1.jpg
-public\\match\\20y\\ab type\\5\\5-a-2.jpg
+public\\match\\20y\\ab type\\5\\5-a-3.webp
+public\\match\\20y\\ab type\\5\\5-a-1.webp
+public\\match\\20y\\ab type\\5\\5-a-2.webp
 </grid>
 
 <title>• 시술 선택 이유</title>
@@ -108,8 +108,8 @@ public\\match\\20y\\ab type\\5\\5-a-2.jpg
 사진 찍을 때 사각턱처럼 보이던 느낌이 많이 사라졌어요.
 
 <grid>
-public\\match\\20y\\ab type\\5\\5-a-5.jpg
-public\\match\\20y\\ab type\\5\\5-a-4.jpg
+public\\match\\20y\\ab type\\5\\5-a-5.webp
+public\\match\\20y\\ab type\\5\\5-a-4.webp
 </grid>
 
 중간에 셀카로 찍은 사진을 봐도
@@ -135,15 +135,15 @@ V라인이 고민이신 분들께
         tags: ['팔자주름', '볼처짐/긴중안부', '이중턱/턱선'],
         content: `<box>✅시술 전</box>
 <grid>
-public\\match\\20y\\ab type\\6\\6-b-1.jpg
-public\\match\\20y\\ab type\\6\\6-b-2.jpg
+public\\match\\20y\\ab type\\6\\6-b-1.webp
+public\\match\\20y\\ab type\\6\\6-b-2.webp
 </grid>
 
 <box>✅시술 후</box>
 <grid>
-public\\match\\20y\\ab type\\6\\6-a-1.jpg
-public\\match\\20y\\ab type\\6\\6-a-2.jpg
-public\\match\\20y\\ab type\\6\\6-a-3.jpg
+public\\match\\20y\\ab type\\6\\6-a-1.webp
+public\\match\\20y\\ab type\\6\\6-a-2.webp
+public\\match\\20y\\ab type\\6\\6-a-3.webp
 </grid>
 
 <title>• 시술 선택 이유</title>
@@ -170,8 +170,8 @@ public\\match\\20y\\ab type\\6\\6-a-3.jpg
 팔자도 훨씬 부드러워 보이고,
 볼이 위로 올라가면서 인상이 한결 정돈된 느낌이 들었어요.
 <grid>
-public\\match\\20y\\ab type\\6\\6-a-4.jpg
-public\\match\\20y\\ab type\\6\\6-a-5.jpg
+public\\match\\20y\\ab type\\6\\6-a-4.webp
+public\\match\\20y\\ab type\\6\\6-a-5.webp
 </grid>
 
 중간에 셀카로 찍은 사진을 봐도

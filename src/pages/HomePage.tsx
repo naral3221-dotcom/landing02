@@ -82,7 +82,7 @@ export default function HomePage() {
         <div className="px-4 text-center">
 
           {/* --- Contact Info --- */}
-          <div className="flex flex-col justify-center items-center gap-4 mb-8">
+          <div className="flex flex-col justify-center items-center gap-4 mt-8 mb-8">
             <div className="flex items-center gap-3 text-slate-600">
               <div className="p-3 bg-white rounded-full shrink-0 shadow-sm" style={{ border: '1px solid rgba(212, 184, 106, 0.3)' }}>
                 <Phone size={20} style={{ color: '#C9A962' }} />

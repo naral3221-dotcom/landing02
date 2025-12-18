@@ -1,15 +1,140 @@
-import React, { useState, useEffect } from 'react';
-import { Loader2, Lock, Check, ShieldCheck } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { motion } from 'motion/react';
+import { Lock, Check, ShieldCheck, Sparkles } from 'lucide-react';
+import { REVIEWS } from '@/data/reviews';
 
 interface Props {
     userName: string; // Step 1에서 받은 이름 ("홍길동"님)
     onNext: () => void; // 최종 결과 페이지로 이동
 }
 
+/* ========== Circular Progress Component ========== */
+interface CircularProgressProps {
+    value: number;
+    size?: number;
+    strokeWidth?: number;
+}
+
+const CircularProgress: React.FC<CircularProgressProps> = ({
+    value,
+    size = 160,
+    strokeWidth = 12,
+}) => {
+    const radius = (size - strokeWidth) / 2;
+    const circumference = 2 * Math.PI * radius;
+    const percentage = Math.min(Math.max(value, 0), 100);
+    const offset = circumference - (percentage / 100) * circumference;
+
+    return (
+        <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+            {/* 글로우 효과 */}
+            <div
+                className="absolute inset-0 blur-2xl opacity-30 rounded-full animate-pulse"
+                style={{ background: 'radial-gradient(circle, #C9A962 0%, transparent 70%)' }}
+            />
+
+            <svg
+                width={size}
+                height={size}
+                viewBox={`0 0 ${size} ${size}`}
+                className="rotate-[-90deg]"
+            >
+                {/* 배경 트랙 */}
+                <circle
+                    cx={size / 2}
+                    cy={size / 2}
+                    r={radius}
+                    fill="none"
+                    strokeWidth={strokeWidth}
+                    className="stroke-slate-100"
+                />
+                {/* 진행 인디케이터 */}
+                <motion.circle
+                    cx={size / 2}
+                    cy={size / 2}
+                    r={radius}
+                    fill="none"
+                    strokeWidth={strokeWidth}
+                    stroke="url(#progressGradient)"
+                    strokeLinecap="round"
+                    initial={{ strokeDashoffset: circumference }}
+                    animate={{ strokeDashoffset: offset }}
+                    transition={{ duration: 0.3, ease: 'easeOut' }}
+                    style={{ strokeDasharray: circumference }}
+                />
+                {/* 그라데이션 정의 */}
+                <defs>
+                    <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#8B7355" />
+                        <stop offset="100%" stopColor="#C9A962" />
+                    </linearGradient>
+                </defs>
+            </svg>
+
+            {/* 중앙 퍼센트 표시 */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <Sparkles size={20} className="mb-1" style={{ color: '#C9A962' }} />
+                <span className="text-3xl font-black text-slate-900">{Math.round(percentage)}%</span>
+                <span className="text-xs text-slate-400 font-medium">분석중</span>
+            </div>
+        </div>
+    );
+};
+
 export const Step5Analysis: React.FC<Props> = ({ userName, onNext }) => {
     const [progress, setProgress] = useState(0);
     const [loadingStep, setLoadingStep] = useState(0);
     const [isAgreed, setIsAgreed] = useState(false);
+
+    // 랜덤 후기 개수 (3~8개 사이)
+    const matchedCount = useMemo(() => Math.floor(Math.random() * 6) + 3, []);
+
+    // 전/후 이미지가 모두 있는 후기 찾기
+    const sampleReview = useMemo(() => {
+        // 전/후 이미지가 모두 있는 후기만 필터링
+        const reviewsWithBeforeAfter = REVIEWS.filter(review => {
+            if (!review?.content) return false;
+            const hasBeforeSection = review.content.includes('✅시술 전');
+            const hasAfterSection = review.content.includes('✅시술 후');
+            return hasBeforeSection && hasAfterSection;
+        });
+
+        if (reviewsWithBeforeAfter.length === 0) {
+            return REVIEWS[Math.floor(Math.random() * REVIEWS.length)];
+        }
+
+        const randomIndex = Math.floor(Math.random() * reviewsWithBeforeAfter.length);
+        return reviewsWithBeforeAfter[randomIndex];
+    }, []);
+
+    // 후기에서 전/후 이미지 경로 추출
+    const { beforeImage, afterImage } = useMemo(() => {
+        if (!sampleReview?.content) return { beforeImage: null, afterImage: null };
+
+        const content = sampleReview.content;
+
+        // "✅시술 전" 섹션에서 첫 번째 이미지 추출
+        const beforeSectionMatch = content.match(/✅시술 전[\s\S]*?(?=✅시술 후|$)/);
+        let beforeImg = null;
+        if (beforeSectionMatch) {
+            const beforeImageMatch = beforeSectionMatch[0].match(/public\\match\\[^\n]+\.webp/);
+            if (beforeImageMatch) {
+                beforeImg = '/' + beforeImageMatch[0].replace(/\\/g, '/');
+            }
+        }
+
+        // "✅시술 후" 섹션에서 첫 번째 이미지 추출
+        const afterSectionMatch = content.match(/✅시술 후[\s\S]*?(?=<title>|$)/);
+        let afterImg = null;
+        if (afterSectionMatch) {
+            const afterImageMatch = afterSectionMatch[0].match(/public\\match\\[^\n]+\.webp/);
+            if (afterImageMatch) {
+                afterImg = '/' + afterImageMatch[0].replace(/\\/g, '/');
+            }
+        }
+
+        return { beforeImage: beforeImg, afterImage: afterImg };
+    }, [sampleReview]);
 
     // 로딩 멘트 사이클
     const LOADING_MESSAGES = [
@@ -19,9 +144,14 @@ export const Step5Analysis: React.FC<Props> = ({ userName, onNext }) => {
         '최적의 시술 케이스 선별 완료!',
     ];
 
-    // 1. AI 분석 시뮬레이션 (2.5초)
+    // AI 분석 시뮬레이션 (3초)
     useEffect(() => {
         if (progress >= 100) return;
+
+        const duration = 3000; // 3초
+        const interval = 30; // 30ms마다 업데이트
+        const totalSteps = duration / interval;
+        const increment = 100 / totalSteps;
 
         const timer = setInterval(() => {
             setProgress((prev) => {
@@ -29,20 +159,18 @@ export const Step5Analysis: React.FC<Props> = ({ userName, onNext }) => {
                     clearInterval(timer);
                     return 100;
                 }
-                // 진행률이 올라갈수록 속도를 조금씩 늦춤 (리얼함 추가)
-                const increment = prev < 50 ? 4 : prev < 80 ? 2 : 1;
                 return Math.min(prev + increment, 100);
             });
-        }, 50);
+        }, interval);
 
         return () => clearInterval(timer);
     }, []);
 
     // 진행률에 따라 멘트 변경
     useEffect(() => {
-        if (progress < 30) setLoadingStep(0);
-        else if (progress < 60) setLoadingStep(1);
-        else if (progress < 90) setLoadingStep(2);
+        if (progress < 25) setLoadingStep(0);
+        else if (progress < 50) setLoadingStep(1);
+        else if (progress < 75) setLoadingStep(2);
         else setLoadingStep(3);
     }, [progress]);
 
@@ -50,37 +178,59 @@ export const Step5Analysis: React.FC<Props> = ({ userName, onNext }) => {
     // --- [Phase 1: 로딩 화면] ---
     if (progress < 100) {
         return (
-            <div className="w-full max-w-xl mx-auto py-12 flex flex-col items-center justify-center animate-fadeIn">
+            <div className="w-full max-w-xl mx-auto py-8 flex flex-col items-center justify-center animate-fadeIn">
                 {/* 신뢰 뱃지 */}
                 <div className="flex items-center justify-center gap-2 mb-8">
-                    <div className="px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1" style={{ backgroundColor: 'rgba(212, 184, 106, 0.15)', border: '1px solid rgba(212, 184, 106, 0.3)', color: '#8B7355' }}>
+                    <div className="px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5" style={{ backgroundColor: 'rgba(212, 184, 106, 0.15)', border: '1px solid rgba(212, 184, 106, 0.3)', color: '#8B7355' }}>
                         <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: '#C9A962' }} />
                         AI 분석 진행중
                     </div>
-                    <div className="px-3 py-1 rounded-full text-xs font-bold" style={{ backgroundColor: 'rgba(212, 184, 106, 0.15)', border: '1px solid rgba(212, 184, 106, 0.3)', color: '#8B7355' }}>
+                    <div className="px-3 py-1.5 rounded-full text-xs font-bold" style={{ backgroundColor: 'rgba(212, 184, 106, 0.15)', border: '1px solid rgba(212, 184, 106, 0.3)', color: '#8B7355' }}>
                         STEP 5 OF 5
                     </div>
                 </div>
 
-                <div className="relative mb-8">
-                    {/* 돌아가는 로딩 아이콘 */}
-                    <div className="absolute inset-0 blur-xl opacity-20 rounded-full animate-pulse" style={{ background: 'linear-gradient(135deg, #8B7355, #C9A962)' }} />
-                    <Loader2 className="w-16 h-16 animate-spin relative z-10" style={{ color: '#C9A962' }} />
+                {/* 원형 프로그레스 */}
+                <div className="mb-8">
+                    <CircularProgress value={progress} />
                 </div>
 
-                <h3 className="text-xl font-bold text-slate-900 mb-2">
+                {/* 로딩 메시지 */}
+                <motion.h3
+                    key={loadingStep}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-lg font-bold text-slate-900 mb-2 text-center"
+                >
                     {LOADING_MESSAGES[loadingStep]}
-                </h3>
-                <p className="text-slate-500 text-sm mb-8">
-                    잠시만 기다려주세요 ({Math.floor(progress)}%)
+                </motion.h3>
+                <p className="text-slate-500 text-sm text-center">
+                    {userName}님의 최적 케이스를 찾고 있습니다
                 </p>
 
-                {/* 프로그레스 바 */}
-                <div className="w-full max-w-xs h-2 bg-slate-100 rounded-full overflow-hidden shadow-inner">
-                    <div
-                        className="h-full transition-all duration-300 ease-out shadow-sm"
-                        style={{ width: `${progress}%`, background: 'linear-gradient(135deg, #8B7355 0%, #C9A962 100%)' }}
-                    />
+                {/* 분석 항목 리스트 */}
+                <div className="mt-8 w-full max-w-xs space-y-2">
+                    {LOADING_MESSAGES.map((msg, idx) => (
+                        <div
+                            key={idx}
+                            className={`flex items-center gap-2 text-sm transition-all duration-300 ${
+                                idx <= loadingStep ? 'opacity-100' : 'opacity-30'
+                            }`}
+                        >
+                            <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${
+                                idx < loadingStep
+                                    ? 'bg-emerald-500 text-white'
+                                    : idx === loadingStep
+                                    ? 'border-2 animate-pulse'
+                                    : 'bg-slate-100'
+                            }`} style={idx === loadingStep ? { borderColor: '#C9A962' } : {}}>
+                                {idx < loadingStep && <Check size={12} strokeWidth={3} />}
+                            </div>
+                            <span className={idx <= loadingStep ? 'text-slate-700' : 'text-slate-400'}>
+                                {msg.replace('...', '').replace(' 중', '').replace(' 완료!', '')}
+                            </span>
+                        </div>
+                    ))}
                 </div>
             </div>
         );
@@ -91,42 +241,98 @@ export const Step5Analysis: React.FC<Props> = ({ userName, onNext }) => {
         <div className="w-full max-w-xl mx-auto animate-fadeInUp">
 
             {/* 1. 상단 메시지 */}
-            <div className="text-center mb-8">
+            <div className="text-center mb-6">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold mb-4" style={{ backgroundColor: 'rgba(212, 184, 106, 0.2)', color: '#8B7355' }}>
                     <Check size={12} strokeWidth={4} />
                     분석 완료
                 </div>
-                <h2 className="text-2xl md:text-3xl font-bold text-slate-900 leading-tight">
-                    <span style={{ background: 'linear-gradient(90deg, #8B7355, #C9A962)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', color: 'transparent' }}>{userName}</span>님에게 딱 맞는<br />
+                <h2 className="text-xl md:text-2xl font-bold text-slate-900 leading-tight break-keep">
+                    <span style={{ background: 'linear-gradient(90deg, #8B7355, #C9A962)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', color: 'transparent' }}>{userName}</span>님의 케이스와 부합한<br />
                     <span className="underline decoration-4 underline-offset-4" style={{ textDecorationColor: 'rgba(201, 169, 98, 0.4)' }}>
-                        BEST 성공 사례
-                    </span>를 찾았습니다.
+                        BEST 성공 사례 <span style={{ background: 'linear-gradient(90deg, #8B7355, #C9A962)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', color: 'transparent' }}>{matchedCount}개</span>
+                    </span>를 찾았습니다!
                 </h2>
             </div>
 
-            {/* 2. 티저 카드 (블러 처리) */}
-            <div className="relative w-full aspect-[4/3] bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100 mb-8 group">
-                {/* 블러된 배경 이미지 (실제 후기 느낌) */}
-                <div className="absolute inset-0 bg-slate-200">
-                    {/* 가짜 데이터 이미지들을 흐릿하게 깔아둠 */}
-                    <div className="grid grid-cols-2 h-full opacity-50 blur-md scale-105">
-                        <div className="bg-slate-300 m-1 rounded-lg"></div>
-                        <div className="bg-slate-300 m-1 rounded-lg"></div>
-                        <div className="bg-slate-300 m-1 rounded-lg"></div>
-                        <div className="bg-slate-300 m-1 rounded-lg"></div>
+            {/* 2. 전/후 비교 카드 (블러 처리) */}
+            <div className="relative bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-100 mb-6">
+                {/* 전/후 이미지 비교 영역 */}
+                <div className="relative bg-slate-100 overflow-hidden">
+                    <div className="flex">
+                        {/* 시술 전 */}
+                        <div className="flex-1 relative">
+                            <div className="absolute top-3 left-3 z-20 px-2 py-1 bg-slate-900/70 text-white text-[10px] font-bold rounded">
+                                BEFORE
+                            </div>
+                            {beforeImage ? (
+                                <img
+                                    src={beforeImage}
+                                    alt="시술 전"
+                                    className="w-full aspect-[3/4] object-cover blur-md scale-105"
+                                />
+                            ) : (
+                                <div className="w-full aspect-[3/4] bg-gradient-to-br from-slate-200 to-slate-300 blur-sm" />
+                            )}
+                        </div>
+
+                        {/* 중앙 구분선 */}
+                        <div className="w-px bg-white/50 z-20" />
+
+                        {/* 시술 후 */}
+                        <div className="flex-1 relative">
+                            <div className="absolute top-3 right-3 z-20 px-2 py-1 text-white text-[10px] font-bold rounded" style={{ backgroundColor: 'rgba(201, 169, 98, 0.9)' }}>
+                                AFTER
+                            </div>
+                            {afterImage ? (
+                                <img
+                                    src={afterImage}
+                                    alt="시술 후"
+                                    className="w-full aspect-[3/4] object-cover blur-md scale-105"
+                                />
+                            ) : (
+                                <div className="w-full aspect-[3/4] bg-gradient-to-br from-slate-200 to-slate-300 blur-sm" />
+                            )}
+                        </div>
+                    </div>
+
+                    {/* 잠금 오버레이 */}
+                    <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex flex-col items-center justify-center text-center p-4 z-10">
+                        <div className="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center mb-3 shadow-lg">
+                            <Lock className="w-5 h-5" />
+                        </div>
+                        <p className="text-slate-600 text-sm break-keep leading-relaxed max-w-[280px]">
+                            <strong className="text-slate-800">밸런스랩은 의료법을 준수</strong>하기에<br />
+                            개인정보 수집 동의 및 상담 신청 후<br />
+                            해당 후기를 열람하실 수 있습니다.
+                        </p>
                     </div>
                 </div>
 
-                {/* 잠금 오버레이 */}
-                <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex flex-col items-center justify-center text-center p-6 z-10">
-                    <div className="w-16 h-16 bg-slate-900 text-white rounded-full flex items-center justify-center mb-4 shadow-lg animate-bounce-slow">
-                        <Lock className="w-7 h-7" />
+                {/* 하단 후기 정보 (블러 처리) */}
+                <div className="p-4 border-t border-slate-100 bg-slate-50/50">
+                    <div className="flex items-center gap-3">
+                        <div className="flex-1 space-y-1.5">
+                            <div className="flex items-center gap-2">
+                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold" style={{ backgroundColor: 'rgba(212, 184, 106, 0.2)', color: '#8B7355' }}>
+                                    {sampleReview?.age}대
+                                </span>
+                                <span className="text-xs">⭐⭐⭐⭐⭐</span>
+                            </div>
+                            <div className="flex flex-wrap gap-1">
+                                {sampleReview?.tags.slice(0, 2).map((tag, idx) => (
+                                    <span key={idx} className="px-2 py-0.5 bg-slate-100 rounded text-[10px] text-slate-500">
+                                        #{tag}
+                                    </span>
+                                ))}
+                                {(sampleReview?.tags.length || 0) > 2 && (
+                                    <span className="text-[10px] text-slate-400">+{(sampleReview?.tags.length || 0) - 2}</span>
+                                )}
+                            </div>
+                        </div>
+                        <div className="text-right">
+                            <p className="text-xs text-slate-400">외 {matchedCount - 1}건의 후기</p>
+                        </div>
                     </div>
-                    <h4 className="text-xl font-bold text-slate-900 mb-2">결과가 잠겨있습니다</h4>
-                    <p className="text-slate-600 text-sm md:text-base break-keep">
-                        의료법상 전후 사진 및 상세 후기는<br />
-                        <strong>상담 신청 동의 후</strong> 열람이 가능합니다.
-                    </p>
                 </div>
             </div>
 

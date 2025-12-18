@@ -10,16 +10,16 @@ export const REVIEWS_30Y_B: ReviewData[] = [
         memo: ['contouring'],
         content: `<box>✅시술 전</box>
 <grid>
-public\\match\\30y\\b type\\14\\14-b-3.png
-public\\match\\30y\\b type\\14\\14-b-1.png
-public\\match\\30y\\b type\\14\\14-b-2.png
+public\\match\\30y\\b type\\14\\14-b-3.webp
+public\\match\\30y\\b type\\14\\14-b-1.webp
+public\\match\\30y\\b type\\14\\14-b-2.webp
 </grid>
 
 <box>✅시술 후</box>
 <grid>
-public\\match\\30y\\b type\\14\\14-a-3.png
-public\\match\\30y\\b type\\14\\14-a-1.png
-public\\match\\30y\\b type\\14\\14-a-2.png
+public\\match\\30y\\b type\\14\\14-a-3.webp
+public\\match\\30y\\b type\\14\\14-a-1.webp
+public\\match\\30y\\b type\\14\\14-a-2.webp
 </grid>
 
 <title>• 시술 선택 이유</title>
@@ -72,10 +72,10 @@ public\\match\\30y\\b type\\14\\14-a-2.png
         tags: ['이중턱/턱선'],
         content: `<box>✅시술 전후</box>
 <grid>
-public\\match\\30y\\b type\\15\\15-a-1.png
-public\\match\\30y\\b type\\15\\15-a-4.png
-public\\match\\30y\\b type\\15\\15-a-3.png
-public\\match\\30y\\b type\\15\\15-a-2.png
+public\\match\\30y\\b type\\15\\15-a-1.webp
+public\\match\\30y\\b type\\15\\15-a-4.webp
+public\\match\\30y\\b type\\15\\15-a-3.webp
+public\\match\\30y\\b type\\15\\15-a-2.webp
 </grid>
 
 <title>• 시술 선택 이유</title>

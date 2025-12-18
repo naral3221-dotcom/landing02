@@ -10,14 +10,14 @@ export const REVIEWS_40Y_B: ReviewData[] = [
         content: `---ID 23---
 <box>✅시술 전</box>
 <grid>
-public\\match\\40y\\b type\\23\\23-b-01.png
-public\\match\\40y\\b type\\23\\23-b-02.png
+public\\match\\40y\\b type\\23\\23-b-01.webp
+public\\match\\40y\\b type\\23\\23-b-02.webp
 </grid>
 
 <box>✅시술 후</box>
 <grid>
-public\\match\\40y\\b type\\23\\23-a-01.png
-public\\match\\40y\\b type\\23\\23-a-02.png
+public\\match\\40y\\b type\\23\\23-a-01.webp
+public\\match\\40y\\b type\\23\\23-a-02.webp
 </grid>
 
 <title>• 시술 선택 이유</title>
@@ -43,13 +43,13 @@ public\\match\\40y\\b type\\23\\23-a-02.png
 차이가 더 확실하게 느껴졌어요.
 
 <grid>
-public\\match\\40y\\b type\\23\\23-b-04.png
-public\\match\\40y\\b type\\23\\23-b-03.png
+public\\match\\40y\\b type\\23\\23-b-04.webp
+public\\match\\40y\\b type\\23\\23-b-03.webp
 </grid>
 
 <grid>
-public\\match\\40y\\b type\\23\\23-a-04.png
-public\\match\\40y\\b type\\23\\23-a-03.png
+public\\match\\40y\\b type\\23\\23-a-04.webp
+public\\match\\40y\\b type\\23\\23-a-03.webp
 </grid>
 
 <title>• 전체 경험</title>
@@ -60,8 +60,8 @@ public\\match\\40y\\b type\\23\\23-a-03.png
 턱 밑을 굳이 가릴 필요가 없어서
 그게 제일 좋아요.
 <grid>
-public\\match\\40y\\b type\\23\\23-a-06.png
-public\\match\\40y\\b type\\23\\23-a-05.png
+public\\match\\40y\\b type\\23\\23-a-06.webp
+public\\match\\40y\\b type\\23\\23-a-05.webp
 </grid>
 
 지금 상태가 너무 만족스러워서
@@ -79,18 +79,18 @@ public\\match\\40y\\b type\\23\\23-a-05.png
         content: `---ID 24---
 <box>✅시술 전</box>
 <grid>
-public\\match\\40y\\b type\\24\\24-b-04.png
-public\\match\\40y\\b type\\24\\24-b-01.png
-public\\match\\40y\\b type\\24\\24-b-02.png
-public\\match\\40y\\b type\\24\\24-b-03.png
+public\\match\\40y\\b type\\24\\24-b-04.webp
+public\\match\\40y\\b type\\24\\24-b-01.webp
+public\\match\\40y\\b type\\24\\24-b-02.webp
+public\\match\\40y\\b type\\24\\24-b-03.webp
 </grid>
 
 <box>✅시술 후</box>
 <grid>
-public\\match\\40y\\b type\\24\\24-a-04.png
-public\\match\\40y\\b type\\24\\24-a-01.png
-public\\match\\40y\\b type\\24\\24-a-02.png
-public\\match\\40y\\b type\\24\\24-a-03.png
+public\\match\\40y\\b type\\24\\24-a-04.webp
+public\\match\\40y\\b type\\24\\24-a-01.webp
+public\\match\\40y\\b type\\24\\24-a-02.webp
+public\\match\\40y\\b type\\24\\24-a-03.webp
 </grid>
 
 <title>• 시술 선택 이유</title>
@@ -133,15 +133,15 @@ V라인을 만들어보고 싶다는 생각을 했어요.
         tags: ['이중턱/턱선'],
         content: `---ID 25---
 <box>✅시술 전</box>
-public\\match\\40y\\b type\\25\\25-b-01.png
-public\\match\\40y\\b type\\25\\25-b-02.png
-public\\match\\40y\\b type\\25\\25-b-03.png
-public\\match\\40y\\b type\\25\\25-b-04.png
+public\\match\\40y\\b type\\25\\25-b-01.webp
+public\\match\\40y\\b type\\25\\25-b-02.webp
+public\\match\\40y\\b type\\25\\25-b-03.webp
+public\\match\\40y\\b type\\25\\25-b-04.webp
 <box>✅시술 전</box>
-public\\match\\40y\\b type\\25\\25-a-01.png
-public\\match\\40y\\b type\\25\\25-a-02.png
-public\\match\\40y\\b type\\25\\25-a-03.png
-public\\match\\40y\\b type\\25\\25-a-04.png
+public\\match\\40y\\b type\\25\\25-a-01.webp
+public\\match\\40y\\b type\\25\\25-a-02.webp
+public\\match\\40y\\b type\\25\\25-a-03.webp
+public\\match\\40y\\b type\\25\\25-a-04.webp
 
 
 10대 학창시절부터 있던 투턱이 20대, 30대까지 이어져 40대까지 오게 되었습니다.
@@ -155,8 +155,8 @@ public\\match\\40y\\b type\\25\\25-a-04.png
 
 저는 멍이 잘 드는 타입인데 통증이나 멍도 거의 없었고, 4일~2주 정도 살짝 당기는 느낌만 있었어요.
 그 이후엔 정말 일상생활에 전혀 불편함이 없었고, 수술 후 2주 만에 동창모임도 다녀왔답니다 ㅋㅋㅋ
-public\\match\\40y\\b type\\25\\25-a-05.png
-public\\match\\40y\\b type\\25\\25-a-06.png
+public\\match\\40y\\b type\\25\\25-a-05.webp
+public\\match\\40y\\b type\\25\\25-a-06.webp
 주변 사람들은 “뭐 바뀐 거 같은데?”
 면서도 수술 자국이 안 보이니까 그냥 살 빠지고 얼굴 좋아진 줄만 알아요ㅎㅎ
 <b>태어나서 처음으로 뾰족한 턱 라인을 가져봤어요 ㅋㅋㅋ</b>

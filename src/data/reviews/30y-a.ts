@@ -9,8 +9,8 @@ export const REVIEWS_30Y_A: ReviewData[] = [
         tags: ['볼꺼짐/땅콩형', '볼처짐/긴중안부'],
         content: `<box>✅시술 전</box>
 <grid>
-public\\match\\30y\\a type\\9\\9-b-1.png
-public\\match\\30y\\a type\\9\\9-b-2.png
+public\\match\\30y\\a type\\9\\9-b-1.webp
+public\\match\\30y\\a type\\9\\9-b-2.webp
 </grid>
 
 <title>• 시술 선택 이유</title>
@@ -18,8 +18,8 @@ public\\match\\30y\\a type\\9\\9-b-2.png
 30대에 접어들면서부터 <high>볼이 패이면서 땅콩형 얼굴이 더 도드라져 보이기</high> 시작했어요.
 피부가 처지니까 볼꺼짐이 더 부각돼 보이고,
 어떤 각도로 사진을 찍어도 얼굴이 울퉁불퉁해 보이는 느낌이 너무 스트레스였어요.
-public\\match\\30y\\a type\\9\\9-b-4.png
-public\\match\\30y\\a type\\9\\9-b-3.png
+public\\match\\30y\\a type\\9\\9-b-4.webp
+public\\match\\30y\\a type\\9\\9-b-3.webp
 
 특히 일상 셀카를 찍을 때마다
 “왜 이렇게 땅콩형으로 보일까…”라는 생각이 계속 들었고,
@@ -41,9 +41,9 @@ public\\match\\30y\\a type\\9\\9-b-3.png
 예전에는 땅콩형으로만 보이던 얼굴이
 전체적으로 정리된 느낌이 들었고,
 인상이 훨씬 안정돼 보이더라구요.
-public\\match\\30y\\a type\\9\\9-a-3.png
-public\\match\\30y\\a type\\9\\9-a-1.png
-public\\match\\30y\\a type\\9\\9-a-2.png
+public\\match\\30y\\a type\\9\\9-a-3.webp
+public\\match\\30y\\a type\\9\\9-a-1.webp
+public\\match\\30y\\a type\\9\\9-a-2.webp
 
 일상 셀카를 찍어봐도
 예전처럼 볼이 푹 꺼져 보이거나
@@ -68,19 +68,19 @@ public\\match\\30y\\a type\\9\\9-a-2.png
         tags: ['팔자주름', '볼처짐/긴중안부'],
         content: `<box>✅시술 전</box>
 <grid>
-public\\match\\30y\\a type\\10\\10-b-4.png
-public\\match\\30y\\a type\\10\\10-b-1.png
-public\\match\\30y\\a type\\10\\10-b-2.png
-public\\match\\30y\\a type\\10\\10-b-3.png
+public\\match\\30y\\a type\\10\\10-b-4.webp
+public\\match\\30y\\a type\\10\\10-b-1.webp
+public\\match\\30y\\a type\\10\\10-b-2.webp
+public\\match\\30y\\a type\\10\\10-b-3.webp
 </grid>
 
 <box>✅시술 후</box>
 <grid>
-public\\match\\30y\\a type\\10\\10-a-4.png
-public\\match\\30y\\a type\\10\\10-a-5.png
-public\\match\\30y\\a type\\10\\10-a-1.png
-public\\match\\30y\\a type\\10\\10-a-2.png
-public\\match\\30y\\a type\\10\\10-a-3.png
+public\\match\\30y\\a type\\10\\10-a-4.webp
+public\\match\\30y\\a type\\10\\10-a-5.webp
+public\\match\\30y\\a type\\10\\10-a-1.webp
+public\\match\\30y\\a type\\10\\10-a-2.webp
+public\\match\\30y\\a type\\10\\10-a-3.webp
 </grid>
 
 <title>• 시술 선택 이유</title>
@@ -130,14 +130,14 @@ public\\match\\30y\\a type\\10\\10-a-3.png
         tags: ['팔자주름', '볼처짐/긴중안부'],
         content: `<box>✅시술 전</box>
 <grid>
-public\\match\\30y\\a type\\11\\11-b-2.png
-public\\match\\30y\\a type\\11\\11-b-1.png
+public\\match\\30y\\a type\\11\\11-b-2.webp
+public\\match\\30y\\a type\\11\\11-b-1.webp
 </grid>
 
 <box>✅시술 후</box>
 <grid>
-public\\match\\30y\\a type\\11\\11-a-2.png
-public\\match\\30y\\a type\\11\\11-a-1.png
+public\\match\\30y\\a type\\11\\11-a-2.webp
+public\\match\\30y\\a type\\11\\11-a-1.webp
 </grid>
 
 <title>• 시술 선택 이유</title>

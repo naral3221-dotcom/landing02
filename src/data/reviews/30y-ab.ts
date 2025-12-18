@@ -10,17 +10,17 @@ export const REVIEWS_30Y_AB: ReviewData[] = [
         memo: ['contouring'],
         content: `<box>✅시술 전</box>
 <grid>
-public\\match\\30y\\ab type\\12\\12-b-2.png
-public\\match\\30y\\ab type\\12\\12-b-3.png
+public\\match\\30y\\ab type\\12\\12-b-2.webp
+public\\match\\30y\\ab type\\12\\12-b-3.webp
 </grid>
 
 <box>✅시술 후</box>
 <grid>
-public\\match\\30y\\ab type\\12\\12-a-3.png
-public\\match\\30y\\ab type\\12\\12-a-1.png
+public\\match\\30y\\ab type\\12\\12-a-3.webp
+public\\match\\30y\\ab type\\12\\12-a-1.webp
 </grid>
 
-public\\match\\30y\\ab type\\12\\12-a-2.png
+public\\match\\30y\\ab type\\12\\12-a-2.webp
 
 <title>• 시술 선택 이유</title>
 과거에 윤곽수술을 한 적이 있어서
@@ -44,7 +44,7 @@ public\\match\\30y\\ab type\\12\\12-a-2.png
 과하게 바뀌기보다는
 예전에 윤곽수술했을 때의 라인이
 조금 더 정돈된 형태로 돌아온 느낌이라 만족스러웠어요.
-public\\match\\30y\\ab type\\12\\12-b-1.png
+public\\match\\30y\\ab type\\12\\12-b-1.webp
 
 <title>• 전체 경험</title>
 기대했던 만큼의 효과는 충분히 나왔고,
@@ -61,16 +61,16 @@ public\\match\\30y\\ab type\\12\\12-b-1.png
         tags: ['얼굴전체', '볼처짐/긴중안부'],
         content: `<box>✅시술 전</box>
 <grid>
-public\\match\\30y\\ab type\\13\\13-a-3.jpg
-public\\match\\30y\\ab type\\13\\13-a-1.jpg
-public\\match\\30y\\ab type\\13\\13-a-2.jpg
+public\\match\\30y\\ab type\\13\\13-a-3.webp
+public\\match\\30y\\ab type\\13\\13-a-1.webp
+public\\match\\30y\\ab type\\13\\13-a-2.webp
 </grid>
 
 <box>✅시술 후</box>
 <grid>
-public\\match\\30y\\ab type\\13\\13-b-1.jpg
-public\\match\\30y\\ab type\\13\\13-b-2.jpg
-public\\match\\30y\\ab type\\13\\13-b-3.jpg
+public\\match\\30y\\ab type\\13\\13-b-1.webp
+public\\match\\30y\\ab type\\13\\13-b-2.webp
+public\\match\\30y\\ab type\\13\\13-b-3.webp
 </grid>
 
 <title>• 시술 선택 이유</title>

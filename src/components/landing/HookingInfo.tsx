@@ -262,17 +262,7 @@ export const HookingInfo = () => {
               {openModal === 1 && <PopupPCL />}
               {openModal === 2 && <PopupAbsorption />}
 
-              {/* CTA Button */}
-              <div className="pt-2 px-2 pb-4">
-                <button
-                  onClick={() => setOpenModal(null)}
-                  className="w-full text-white py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] text-sm break-words"
-                  style={{ background: 'linear-gradient(135deg, #8B7355 0%, #C9A962 100%)', boxShadow: '0 10px 20px -5px rgba(139, 115, 85, 0.3)' }}
-                >
-                  나에게 맞는 리프팅 상담받기
-                </button>
-              </div>
-            </div>
+                          </div>
           </div>
         </div>
       )}

@@ -32,9 +32,9 @@ export const Step4Question: React.FC<Props> = ({ onNext, defaultValues }) => {
     };
 
     return (
-        <div className="w-full max-w-xl mx-auto animate-fadeIn">
+        <div className="w-full max-w-xl mx-auto animate-fadeIn py-4">
             {/* 헤더 개선: 뱃지 추가 */}
-            <div className="text-center mb-10 space-y-4">
+            <div className="text-center mb-12 space-y-4">
                 {/* 신뢰 뱃지 */}
                 <div className="flex items-center justify-center gap-2 mb-2">
                     <div className="px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1" style={{ backgroundColor: 'rgba(212, 184, 106, 0.15)', border: '1px solid rgba(212, 184, 106, 0.3)', color: '#8B7355' }}>
@@ -55,15 +55,15 @@ export const Step4Question: React.FC<Props> = ({ onNext, defaultValues }) => {
                 </p>
             </div>
 
-            <div className="space-y-10">
+            <div>
                 {/* Q1. 윤곽수술 경험 여부 */}
-                <div className="space-y-4">
-                    <div className="flex items-center gap-2">
+                <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-4">
                         <span className="text-xs font-bold px-2 py-1 rounded" style={{ backgroundColor: 'rgba(212, 184, 106, 0.2)', color: '#8B7355' }}>Q1</span>
                         <label className="text-lg font-bold text-slate-800">과거 윤곽수술을 하셨나요?</label>
                     </div>
 
-                    <div className="flex gap-3">
+                    <div className="flex gap-4">
                         <button
                             onClick={() => setHasContouringExp(true)}
                             className={`
@@ -94,7 +94,7 @@ export const Step4Question: React.FC<Props> = ({ onNext, defaultValues }) => {
 
                     {/* 안내 메시지 */}
                     {hasContouringExp === true && (
-                        <div className="flex items-start gap-3 bg-orange-50 p-4 rounded-xl border border-orange-100 animate-fadeIn">
+                        <div className="flex items-start gap-3 bg-orange-50 p-4 rounded-xl border border-orange-100 animate-fadeIn mt-4">
                             <AlertCircle className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
                             <span className="text-sm text-orange-800 leading-snug break-keep">
                                 윤곽수술 후 처짐은 일반적인 노화와 피부 구조가 다릅니다. <br />
@@ -104,16 +104,19 @@ export const Step4Question: React.FC<Props> = ({ onNext, defaultValues }) => {
                     )}
                 </div>
 
-                <div className="w-full h-px bg-slate-100" />
+                {/* 구분선 + 여백 */}
+                <div className="py-1">
+                    <div className="w-full h-px bg-slate-200" />
+                </div>
 
                 {/* Q2. 우선순위 선택 (UI 수정됨) */}
-                <div className="space-y-4">
-                    <div className="flex items-center gap-2">
+                <div className="mt-6">
+                    <div className="flex items-center gap-2 mb-4">
                         <span className="text-xs font-bold px-2 py-1 rounded" style={{ backgroundColor: 'rgba(212, 184, 106, 0.2)', color: '#8B7355' }}>Q2</span>
                         <label className="text-lg font-bold text-slate-800">가장 중요하게 생각하는 점은?</label>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-3">
+                    <div className="grid grid-cols-1 gap-4">
                         {PRIORITIES.map((item) => (
                             <button
                                 key={item}
@@ -146,7 +149,7 @@ export const Step4Question: React.FC<Props> = ({ onNext, defaultValues }) => {
             </div>
 
             {/* 다음 단계 버튼 */}
-            <div className="pt-16 flex justify-center">
+            <div className="pt-12 flex justify-center">
                 <button
                     onClick={handleSubmit}
                     disabled={!isValid}

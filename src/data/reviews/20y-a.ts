@@ -8,13 +8,13 @@ export const REVIEWS_20Y_A: ReviewData[] = [
         targets: ['mid'], // a type
         tags: ['볼처짐', '얼굴전체'],
         content: `<box>✅시술 전</box>
-public\\match\\20y\\a type\\1\\1-b-2.jpg
-public\\match\\20y\\a type\\1\\1-b-1.jpg
+public\\match\\20y\\a type\\1\\1-b-2.webp
+public\\match\\20y\\a type\\1\\1-b-1.webp
 
 <box>✅시술 후</box>
-public\\match\\20y\\a type\\1\\1-a-2.jpg
-public\\match\\20y\\a type\\1\\1-a-3.jpg
-public\\match\\20y\\a type\\1\\1-a-1.jpg
+public\\match\\20y\\a type\\1\\1-a-2.webp
+public\\match\\20y\\a type\\1\\1-a-3.webp
+public\\match\\20y\\a type\\1\\1-a-1.webp
 
 <title>• 시술 선택 이유</title>
 선천적으로 볼살이 아래쪽으로 쳐진 편이라 얼굴이 항상 둥글어 보였어요.
@@ -52,13 +52,13 @@ public\\match\\20y\\a type\\1\\1-a-1.jpg
         tags: ['팔자주름', '볼처짐/긴중안부'],
         content: `<box>✅시술 전</box>
 <grid>
-public\\match\\20y\\a type\\2\\2-b-1.jpg
+public\\match\\20y\\a type\\2\\2-b-1.webp
 </grid>
 
 <box>✅시술 후</box>
 <grid>
-public\\match\\20y\\a type\\2\\2-a-2.jpg
-public\\match\\20y\\a type\\2\\2-a-1.jpg
+public\\match\\20y\\a type\\2\\2-a-2.webp
+public\\match\\20y\\a type\\2\\2-a-1.webp
 </grid>
 
 <title>• 시술 선택 이유</title>
@@ -82,7 +82,7 @@ public\\match\\20y\\a type\\2\\2-a-1.jpg
 전체적으로 얼굴이 위로 정리된 느낌이라
 피곤해 보이던 인상이 훨씬 또렷해졌어요.
 
-public\\match\\20y\\a type\\2\\2-a-3.jpg
+public\\match\\20y\\a type\\2\\2-a-3.webp
 
 붓기나 통증도 생각보다 크지 않았고,
 마스크 쓰고 출근하는 데 전혀 부담 없어서 일상 복귀도 빨랐습니다.
@@ -101,12 +101,12 @@ public\\match\\20y\\a type\\2\\2-a-3.jpg
         tags: ['팔자주름', '볼처짐/긴중안부'],
         content: `<box>✅시술 전</box>
 <grid>
-public\\match\\20y\\a type\\3\\3-b-2.jpg
-public\\match\\20y\\a type\\3\\3-b-1.jpg
+public\\match\\20y\\a type\\3\\3-b-2.webp
+public\\match\\20y\\a type\\3\\3-b-1.webp
 </grid>
 
 <box>✅시술 후</box>
-public\\match\\20y\\a type\\3\\3-a-1.jpg
+public\\match\\20y\\a type\\3\\3-a-1.webp
 
 
 <title>• 시술 선택 이유</title>
@@ -139,8 +139,8 @@ public\\match\\20y\\a type\\3\\3-a-1.jpg
 인상이 달라지니까 자신감도 생기고
 사진 찍는 것도 다시 좋아졌어요.
 
-public\\match\\20y\\a type\\3\\3-a-4.jpg
-public\\match\\20y\\a type\\3\\3-a-3.jpg
+public\\match\\20y\\a type\\3\\3-a-4.webp
+public\\match\\20y\\a type\\3\\3-a-3.webp
 
 팔자주름 때문에 고민하는 20대 분들,
 특히 얼굴이 길어 보이거나 노안 인상이 싫다면

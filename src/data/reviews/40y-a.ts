@@ -11,14 +11,14 @@ export const REVIEWS_40Y_A: ReviewData[] = [
         content:
 
             `<box>✅시술 전</box>
-public\\match\\40y\\a type\\16\\16-b-03.png
-public\\match\\40y\\a type\\16\\16-b-01.png
-public\\match\\40y\\a type\\16\\16-b-02.png
+public\\match\\40y\\a type\\16\\16-b-03.webp
+public\\match\\40y\\a type\\16\\16-b-01.webp
+public\\match\\40y\\a type\\16\\16-b-02.webp
 
 <box>✅시술 후</box>
-public\\match\\40y\\a type\\16\\16-a-01.png
-public\\match\\40y\\a type\\16\\16-a-02.png
-public\\match\\40y\\a type\\16\\16-a-03.png
+public\\match\\40y\\a type\\16\\16-a-01.webp
+public\\match\\40y\\a type\\16\\16-a-02.webp
+public\\match\\40y\\a type\\16\\16-a-03.webp
 
 <title>• 시술 선택 이유</title>
 나이가 들면서 중안부 처짐이랑 입가주름, 팔자주름이
@@ -46,8 +46,8 @@ public\\match\\40y\\a type\\16\\16-a-03.png
 중안부가 정리되니까
 전체 인상이 훨씬 덜 피곤해 보이더라구요.
 <grid>
-public\\match\\40y\\a type\\16\\16-a-06.png
-public\\match\\40y\\a type\\16\\16-a-05.png
+public\\match\\40y\\a type\\16\\16-a-06.webp
+public\\match\\40y\\a type\\16\\16-a-05.webp
 </grid>
 
 전후 사진을 비교해보니까
@@ -76,14 +76,14 @@ public\\match\\40y\\a type\\16\\16-a-05.png
         tags: ['팔자주름', '중안면'],
         content: `<box>✅시술 전</box>
 <grid>
-public\\match\\40y\\a type\\17\\17-a-02.png
-public\\match\\40y\\a type\\17\\17-a-01.png
+public\\match\\40y\\a type\\17\\17-a-02.webp
+public\\match\\40y\\a type\\17\\17-a-01.webp
 </grid>
 
 <box>✅시술 후</box>
 <grid>
-public\\match\\40y\\a type\\17\\17-b-02.png
-public\\match\\40y\\a type\\17\\17-b-01.png
+public\\match\\40y\\a type\\17\\17-b-02.webp
+public\\match\\40y\\a type\\17\\17-b-01.webp
 </grid>
 
 <title>• 시술 선택 이유</title>
@@ -114,7 +114,7 @@ public\\match\\40y\\a type\\17\\17-b-01.png
 😳 **팔자가 한 번에 옅어지고,
 주름 길이 자체가 짧아진 게 바로 느껴졌어요.**
 이건 사진으로 봐도 확실히 차이가 나더라구요.
-public\\match\\40y\\a type\\17\\17-a-03.png
+public\\match\\40y\\a type\\17\\17-a-03.webp
 (왼쪽이 하기전, 오른쪽이 후)
 전후 비교를 해보니까
 “아, 사람들이 왜 실리프팅 실리프팅 하는지 이제 알겠다”
@@ -138,7 +138,7 @@ public\\match\\40y\\a type\\17\\17-a-03.png
         tags: ['볼처짐/긴중안부'],
         content:
             `<box>✅시술 전</box>
-public\\match\\40y\\a type\\18\\18-b-01.png
+public\\match\\40y\\a type\\18\\18-b-01.webp
 
 <title>• 시술 선택 이유</title>
 예전에는 피부 처짐이 심한 편은 아니라고 생각했고,
@@ -165,9 +165,9 @@ public\\match\\40y\\a type\\18\\18-b-01.png
 <b>중안부가 정리되면서 얼굴 비율이 달라 보이는 게</b>
 셀카로도 바로 느껴졌어요.
 
-public\\match\\40y\\a type\\18\\18-a-02.png
-public\\match\\40y\\a type\\18\\18-a-03.png
-public\\match\\40y\\a type\\18\\18-a-01.png
+public\\match\\40y\\a type\\18\\18-a-02.webp
+public\\match\\40y\\a type\\18\\18-a-03.webp
+public\\match\\40y\\a type\\18\\18-a-01.webp
 
 전후 비교를 해보니
 중안부가 짧아 보이면서
@@ -181,7 +181,7 @@ public\\match\\40y\\a type\\18\\18-a-01.png
 50을 앞두고도
 이 정도로 자연스럽게 정리될 수 있다는 게
 개인적으로는 꽤 긍정적인 경험이었어요.
-public\\match\\40y\\a type\\18\\18-a-04.png
+public\\match\\40y\\a type\\18\\18-a-04.webp
 바쁜 직장생활 중에도
 부담 없이 받을 수 있는 리프팅을 찾고 계신 분들,
 중안부 길이 때문에 인상이 달라 보이는 게 고민이셨다면
@@ -194,14 +194,14 @@ public\\match\\40y\\a type\\18\\18-a-04.png
         tags: ['팔자주름', '볼처짐/긴중안부'],
         content: `
 <box>✅시술 전</box>
-public\\match\\40y\\a type\\19\\19-b-01.png
-public\\match\\40y\\a type\\19\\19-b-02.png
-public\\match\\40y\\a type\\19\\19-b-03.png
+public\\match\\40y\\a type\\19\\19-b-01.webp
+public\\match\\40y\\a type\\19\\19-b-02.webp
+public\\match\\40y\\a type\\19\\19-b-03.webp
 
 <box>✅시술 후</box>
-public\\match\\40y\\a type\\19\\19-a-03.png
-public\\match\\40y\\a type\\19\\19-a-01.png
-public\\match\\40y\\a type\\19\\19-a-02.png
+public\\match\\40y\\a type\\19\\19-a-03.webp
+public\\match\\40y\\a type\\19\\19-a-01.webp
+public\\match\\40y\\a type\\19\\19-a-02.webp
 
 
 <title>• 시술 선택 이유</title>
@@ -258,8 +258,8 @@ public\\match\\40y\\a type\\19\\19-a-02.png
         memo: ['contouring'], // Mention of face length/contouring concerns
         content: `
 <box>✅시술 전/후 비교</box>
-public\\match\\40y\\a type\\20\\20-a-1.png
-public\\match\\40y\\a type\\20\\20-a-2.png
+public\\match\\40y\\a type\\20\\20-a-1.webp
+public\\match\\40y\\a type\\20\\20-a-2.webp
 
 <title>• 시술 선택 이유</title>
 원래부터 팔자주름이랑 볼 패임 때문에 고민이 있었어요.
