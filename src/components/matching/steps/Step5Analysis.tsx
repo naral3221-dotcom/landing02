@@ -218,13 +218,11 @@ export const Step5Analysis: React.FC<Props> = ({ userName, onNext }) => {
                             }`}
                         >
                             <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${
-                                idx < loadingStep
+                                idx <= loadingStep
                                     ? 'bg-emerald-500 text-white'
-                                    : idx === loadingStep
-                                    ? 'border-2 animate-pulse'
                                     : 'bg-slate-100'
-                            }`} style={idx === loadingStep ? { borderColor: '#C9A962' } : {}}>
-                                {idx < loadingStep && <Check size={12} strokeWidth={3} />}
+                            }`}>
+                                {idx <= loadingStep && <Check size={12} strokeWidth={3} />}
                             </div>
                             <span className={idx <= loadingStep ? 'text-slate-700' : 'text-slate-400'}>
                                 {msg.replace('...', '').replace(' 중', '').replace(' 완료!', '')}

@@ -58,7 +58,21 @@ export const DbCtaSection = ({ onScrollToForm }: DbCtaProps) => {
       style={{ background: 'linear-gradient(135deg, #5C4A1F 0%, #8B7355 50%, #6B5A2F 100%)' }}>
 
       {/* ========== Background Effects ========== */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 brightness-100 mix-blend-overlay" />
+      {/* 백그라운드 이미지 */}
+      <div
+        className="absolute inset-0 opacity-40 mix-blend-overlay pointer-events-none bg-cover bg-center"
+        style={{ backgroundImage: `url('/bg/group-6.png')` }}
+      />
+      {/* 노이즈 텍스처 - 질감 강화 */}
+      <div
+        className="absolute inset-0 opacity-20 mix-blend-overlay pointer-events-none"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+        }}
+      />
+      {/* 그라데이션 오버레이 */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/30 pointer-events-none" />
+      {/* 빛 효과 */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-[-50%] left-[-20%] w-[800px] h-[800px] bg-white/5 rounded-full blur-[100px]" />
         <div className="absolute bottom-[-50%] right-[-20%] w-[800px] h-[800px] bg-amber-900/20 rounded-full blur-[100px]" />
@@ -107,10 +121,12 @@ export const DbCtaSection = ({ onScrollToForm }: DbCtaProps) => {
         <div className="h-8" aria-hidden="true" />
 
         {/* --- Sub Copy --- */}
-        <p className="mb-10 text-base leading-relaxed font-medium opacity-90" style={{ color: '#F5E6C8' }}>
-          밸런스랩에서 시술받은 실제 환자 데이터를 바탕으로<br />
-          나와 가장 유사한 케이스의 결과와 후기를<br />
-          <strong className="text-white">AI가 정밀하게 분석하여 보여드립니다.</strong>
+        <p className="mb-10 text-base leading-relaxed font-medium drop-shadow-md" style={{ color: '#F5E6C8', textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>
+          밸런스랩에서 시술받은<br />
+          실제 환자 데이터를 바탕으로<br />
+          나와 가장 유사한 케이스의<br />
+          결과와 후기를<br />
+          <strong className="text-white drop-shadow-lg">AI가 정밀하게 분석하여 보여드립니다.</strong>
         </p>
 
         {/* --- Spacer --- */}
@@ -120,7 +136,7 @@ export const DbCtaSection = ({ onScrollToForm }: DbCtaProps) => {
         <div className="flex flex-col gap-4 justify-center items-center px-4">
           <button
             onClick={onScrollToForm}
-            className="flex items-center justify-center bg-white text-xl px-10 py-6 rounded-full font-bold shadow-xl transition-transform hover:scale-105 border-2 border-transparent"
+            className="flex items-center justify-center bg-white text-xl px-10 py-6 rounded-full font-bold shadow-xl transition-transform hover:scale-105 border-2 border-transparent whitespace-nowrap"
             style={{ color: '#5C4A1F', boxShadow: '0 20px 40px -10px rgba(0,0,0,0.3)' }}
           >
             <Scan className="mr-2 h-7 w-7 shrink-0" />

@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Sparkles, Check } from 'lucide-react';
 
@@ -39,6 +38,18 @@ const INITIAL_DATA: MatchingData = {
 
 const TOTAL_STEPS = 5;
 
+/* ========== Ripple Animation Settings ========== */
+const RIPPLE_CONFIG = {
+  size: 48,          // 리플 크기 (px) - 원형 버튼은 32px
+  top: -8,           // 위치 조절 (px) - 음수: 위로, 양수: 아래로 (버튼과 중앙 맞춤: -(size-32)/2)
+  color: '#C9A962',  // 빛 색상
+  opacityMin: 0.15,  // 최소 투명도
+  opacityMax: 0.35,  // 최대 투명도
+  scaleMin: 1,       // 최소 스케일
+  scaleMax: 1.10,    // 최대 스케일
+  duration: 1.2,     // 애니메이션 속도 (초)
+};
+
 const STEP_INFO = [
   { num: 1, title: '정보입력' },
   { num: 2, title: '연령선택' },
@@ -51,7 +62,6 @@ const STEP_INFO = [
 export const AiMatchingSystem: React.FC = () => {
   const [step, setStep] = useState<number>(1);
   const [data, setData] = useState<MatchingData>(INITIAL_DATA);
-  const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
 
   /* ========== Helpers ========== */
@@ -111,146 +121,195 @@ export const AiMatchingSystem: React.FC = () => {
     handleScroll();
   };
 
-  // STEP 5 완료 -> /result 페이지로 이동
+  // STEP 5 완료 -> Result Page로 이동 (옵션 3: 외부 서버)
   const handleStep5Next = () => {
-    const queryData = encodeURIComponent(JSON.stringify(data));
-    navigate(`/result?data=${queryData}`);
+    // 개발 환경: Result Page Design Overview 서버로 리다이렉트
+    // 배포 시: 동일 서버의 /result 경로로 변경
+    const resultBaseUrl = import.meta.env.DEV
+      ? 'http://localhost:5173'
+      : '';  // 배포 시 빈 문자열 (같은 서버)
+
+    const params = new URLSearchParams({
+      name: data.name,
+      age: data.age,
+      tags: data.selectedTags.join(','),
+      exp: String(data.hasContouringExp || false),
+      priority: data.priority,
+    });
+
+    window.location.href = `${resultBaseUrl}/result?${params.toString()}`;
   };
 
   /* ========== Render ========== */
   return (
     <div
       ref={containerRef}
-      className="w-full bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden p-4 min-h-[500px] transition-all duration-500 ease-in-out"
+      className="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-visible border border-slate-100 relative min-h-[500px]"
     >
+      <div className="p-5 space-y-6">
 
-      {/* ================================================================
-          AI STEP INDICATOR - 칩 + 타이핑 스타일
-          ================================================================ */}
-      {step <= TOTAL_STEPS && (
-        <div className="mb-6">
+        {/* ================================================================
+            MODERN PROGRESS STEPS - 피그마 디자인
+            ================================================================ */}
+        <div className="relative px-1 pt-2 pb-6">
+          {/* Step Indicators Container */}
+          <div className="relative max-w-[430px] mx-auto">
+            {/* Connection Line Background - 스텝 원형 중앙을 관통하는 라인 */}
+            <div className="absolute top-[16px] left-[16px] right-[16px] h-[2px] bg-slate-200 rounded-full overflow-hidden">
+              <motion.div
+                className="h-full"
+                style={{ background: 'linear-gradient(90deg, #8B7355, #C9A962)' }}
+                initial={{ width: "0%" }}
+                animate={{ width: `${((step - 1) / (TOTAL_STEPS - 1)) * 100}%` }}
+                transition={{ duration: 0.5, ease: "circOut" }}
+              />
+            </div>
 
-          {/* --- 가로 칩 버튼들 --- */}
-          <div className="flex gap-1.5 mb-4 overflow-x-auto hide-scrollbar pb-1">
+            <div className="relative flex justify-between items-center z-10">
             {STEP_INFO.map((item) => {
               const isActive = step === item.num;
               const isCompleted = step > item.num;
 
               return (
-                <motion.div
-                  key={item.num}
-                  animate={{ scale: isActive ? 1.02 : 1 }}
-                  className={`
-                    flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-300 shrink-0
-                    ${isActive ? 'bg-slate-900 text-white shadow-lg' : ''}
-                    ${isCompleted ? 'bg-emerald-100 text-emerald-700' : ''}
-                    ${!isActive && !isCompleted ? 'bg-slate-100 text-slate-400' : ''}
-                  `}
-                >
-                  {isCompleted ? (
-                    <Check size={12} strokeWidth={3} />
-                  ) : (
-                    <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-black
-                      ${isActive ? 'bg-white/20' : 'bg-slate-200/50'}
-                    `}>
-                      {item.num}
-                    </span>
+                <div key={item.num} className="flex flex-col items-center gap-2 relative group cursor-default">
+                  {/* Active Ripple Animation - 은은한 빛이 두근두근 */}
+                  {isActive && (
+                    <motion.div
+                      className="absolute left-1/2 -translate-x-1/2 rounded-full pointer-events-none -z-10"
+                      style={{
+                        width: RIPPLE_CONFIG.size,
+                        height: RIPPLE_CONFIG.size,
+                        top: RIPPLE_CONFIG.top,
+                        backgroundColor: RIPPLE_CONFIG.color,
+                      }}
+                      animate={{
+                        scale: [RIPPLE_CONFIG.scaleMin, RIPPLE_CONFIG.scaleMax, RIPPLE_CONFIG.scaleMin],
+                        opacity: [RIPPLE_CONFIG.opacityMax, RIPPLE_CONFIG.opacityMin, RIPPLE_CONFIG.opacityMax]
+                      }}
+                      transition={{ duration: RIPPLE_CONFIG.duration, repeat: Infinity, ease: "easeInOut" }}
+                    />
                   )}
-                  <span>{item.title}</span>
-                </motion.div>
+
+                  <motion.div
+                    className={`
+                      w-8 h-8 rounded-full flex items-center justify-center border-[2.5px] z-10 bg-white transition-all duration-300 relative shadow-sm
+                      ${isActive ? 'shadow-[0_0_15px_rgba(201,169,98,0.3)]' : ''}
+                      ${isCompleted ? 'text-white border-transparent' : ''}
+                      ${!isActive && !isCompleted ? 'border-slate-100 text-slate-300' : ''}
+                    `}
+                    style={
+                      isActive ? { borderColor: '#8B7355', color: '#8B7355' } :
+                        isCompleted ? { borderColor: '#8B7355', backgroundColor: '#8B7355' } :
+                          {}
+                    }
+                    animate={{ scale: isActive ? 1.15 : 1 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                  >
+                    {isCompleted ? (
+                      <Check className="w-4 h-4 stroke-[3]" />
+                    ) : (
+                      <span className="text-[11px] font-extrabold">{item.num}</span>
+                    )}
+                  </motion.div>
+
+                  {/* Label */}
+                  <div className={`
+                    absolute -bottom-6 text-[10px] whitespace-nowrap transition-all duration-500
+                    ${isActive ? 'font-bold transform translate-y-0 opacity-100' : 'font-medium transform -translate-y-1 opacity-0'}
+                  `}
+                    style={{ color: isActive ? '#C9A962' : '#cbd5e1' }}
+                  >
+                    {item.title}
+                  </div>
+                </div>
               );
             })}
-          </div>
-
-          {/* --- AI 타이핑 상태 표시 --- */}
-          <div className="flex items-center gap-3 px-1">
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <Sparkles size={14} className="text-amber-500" />
-              </div>
-              <AnimatePresence mode="wait">
-                <motion.span
-                  key={step}
-                  initial={{ opacity: 0, y: 5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -5 }}
-                  className="text-sm text-slate-600"
-                >
-                  {step === 1 && 'AI 매칭을 위한 기본 정보를 입력해주세요'}
-                  {step === 2 && '정확한 매칭을 위해 연령대를 선택해주세요'}
-                  {step === 3 && '개선하고 싶은 부위를 선택해주세요'}
-                  {step === 4 && '맞춤 분석을 위한 추가 정보를 입력해주세요'}
-                  {step === 5 && 'AI가 최적의 케이스를 분석하고 있습니다'}
-                  <motion.span
-                    animate={{ opacity: [1, 0, 1] }}
-                    transition={{ duration: 1, repeat: Infinity }}
-                    className="inline-block ml-0.5"
-                  >
-                    _
-                  </motion.span>
-                </motion.span>
-              </AnimatePresence>
             </div>
           </div>
-
-          {/* --- 미니 프로그레스 --- */}
-          <div className="mt-3 h-1 bg-slate-100 rounded-full overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
-              transition={{ duration: 0.5, ease: 'easeOut' }}
-              className="h-full bg-gradient-to-r from-slate-700 to-slate-500 rounded-full"
-            />
-          </div>
-
         </div>
-      )}
 
-      {/* ================================================================
-          STEP CONTENT
-          ================================================================ */}
-      <div key={step} className="animate-fadeIn">
+        {/* ================================================================
+            AI HELPER TEXT
+            ================================================================ */}
+        <div className="flex items-center justify-center gap-2">
+          <div className="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #8B7355, #C9A962)' }}>
+            <Sparkles className="w-3 h-3 text-white" />
+          </div>
+          <div className="text-sm font-medium text-[#1e293b] min-h-[20px]">
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={step}
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -5 }}
+                transition={{ duration: 0.3 }}
+              >
+                {step === 1 && 'AI 매칭을 위한 기본 정보를 입력해주세요'}
+                {step === 2 && '정확한 매칭을 위해 연령대를 선택해주세요'}
+                {step === 3 && '개선하고 싶은 부위를 선택해주세요'}
+                {step === 4 && '맞춤 분석을 위한 추가 정보를 입력해주세요'}
+                {step === 5 && 'AI가 최적의 케이스를 분석하고 있습니다'}
+              </motion.span>
+            </AnimatePresence>
+            <span className="animate-pulse ml-0.5" style={{ color: '#C9A962' }}>_</span>
+          </div>
+        </div>
 
-        {/* --- Step 1: Name & Phone --- */}
-        {step === 1 && (
-          <Step1NamePhone
-            onNext={handleStep1Next}
-            defaultValues={{ name: data.name, phone: data.phone }}
-          />
-        )}
+        {/* ================================================================
+            STEP CONTENT
+            ================================================================ */}
+        <div className="min-h-[300px]">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={step}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.25 }}
+            >
+              {/* --- Step 1: Name & Phone --- */}
+              {step === 1 && (
+                <Step1NamePhone
+                  onNext={handleStep1Next}
+                  defaultValues={{ name: data.name, phone: data.phone }}
+                />
+              )}
 
-        {/* --- Step 2: Age Selection --- */}
-        {step === 2 && (
-          <Step2Age
-            onNext={handleStep2Next}
-            defaultAge={data.age}
-          />
-        )}
+              {/* --- Step 2: Age Selection --- */}
+              {step === 2 && (
+                <Step2Age
+                  onNext={handleStep2Next}
+                  defaultAge={data.age}
+                />
+              )}
 
-        {/* --- Step 3: Concern Selection --- */}
-        {step === 3 && (
-          <Step3ConcernSelection
-            selectedTags={data.selectedTags}
-            onToggleTag={handleToggleTag}
-            onNext={handleStep3Next}
-          />
-        )}
+              {/* --- Step 3: Concern Selection --- */}
+              {step === 3 && (
+                <Step3ConcernSelection
+                  selectedTags={data.selectedTags}
+                  onToggleTag={handleToggleTag}
+                  onNext={handleStep3Next}
+                />
+              )}
 
-        {/* --- Step 4: Additional Questions --- */}
-        {step === 4 && (
-          <Step4Question
-            onNext={handleStep4Next}
-            defaultValues={{ hasContouringExp: data.hasContouringExp, priority: data.priority }}
-          />
-        )}
+              {/* --- Step 4: Additional Questions --- */}
+              {step === 4 && (
+                <Step4Question
+                  onNext={handleStep4Next}
+                  defaultValues={{ hasContouringExp: data.hasContouringExp, priority: data.priority }}
+                />
+              )}
 
-        {/* --- Step 5: AI Analysis --- */}
-        {step === 5 && (
-          <Step5Analysis
-            userName={data.name}
-            onNext={handleStep5Next}
-          />
-        )}
+              {/* --- Step 5: AI Analysis --- */}
+              {step === 5 && (
+                <Step5Analysis
+                  userName={data.name}
+                  onNext={handleStep5Next}
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
 
       </div>
     </div>

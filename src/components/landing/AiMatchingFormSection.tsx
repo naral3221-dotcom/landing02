@@ -1,7 +1,6 @@
 import { forwardRef } from 'react';
 import { motion } from 'motion/react';
 import { AiMatchingSystem } from '../matching';
-import { FileCheck, Users, Activity, MessageCircle } from 'lucide-react';
 
 /* ============================================================================
    AI MATCHING FORM SECTION
@@ -11,13 +10,18 @@ import { FileCheck, Users, Activity, MessageCircle } from 'lucide-react';
    ============================================================================ */
 
 /* ========== StatBox Component ========== */
-const StatBox = ({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) => (
-  <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm flex flex-col gap-1 items-center text-center hover:border-[#C9A962]/30 transition-colors">
-    <div className="bg-[#f8f5f2] p-1.5 rounded-lg mb-1">
-      {icon}
+const StatBox = ({ iconSrc, value, label }: { iconSrc: string; value: string; label: string }) => (
+  <div
+    className="bg-white rounded-xl border border-slate-100 shadow-sm flex flex-col items-center justify-center text-center hover:border-[#C9A962]/30 transition-colors"
+    style={{ aspectRatio: '173 / 95' }}
+  >
+    <div className="flex flex-col items-center gap-3">
+      <div className="bg-[#f8f5f2] p-1.5 rounded-lg">
+        <img src={iconSrc} alt={label} className="w-6 h-6 object-contain" />
+      </div>
+      <div className="font-bold text-[#1e293b] text-lg leading-none tracking-wide">{value}</div>
+      <div className="text-[10px] text-slate-400 font-medium leading-none tracking-wider">{label}</div>
     </div>
-    <div className="font-bold text-[#1e293b] text-sm">{value}</div>
-    <div className="text-[11px] text-slate-500 font-medium">{label}</div>
   </div>
 );
 
@@ -59,7 +63,7 @@ export const AiMatchingFormSection = forwardRef<HTMLElement>((_, ref) => {
           className="text-center mb-6"
         >
           <h2 className="text-2xl font-bold text-[#1e293b] leading-[1.3] tracking-tight mb-3">
-            정확한 <span className="text-[#8B7355]">CASE 매칭</span>을 위해<br />
+            정확한 <span style={{ color: '#8B7355' }}>CASE 매칭</span>을 위해<br />
             정보를 입력해주세요
           </h2>
 
@@ -77,22 +81,22 @@ export const AiMatchingFormSection = forwardRef<HTMLElement>((_, ref) => {
           className="grid grid-cols-2 gap-3 mb-8"
         >
           <StatBox
-            icon={<FileCheck className="w-4 h-4 text-[#8B7355]" />}
+            iconSrc="/source/icon/누적매칭 icon.png"
             value="1,247+"
             label="누적 매칭 성공"
           />
           <StatBox
-            icon={<Users className="w-4 h-4 text-[#8B7355]" />}
+            iconSrc="/source/icon/고객만족도 아이콘.png"
             value="98.2%"
             label="고객 만족도"
           />
           <StatBox
-            icon={<Activity className="w-4 h-4 text-[#8B7355]" />}
+            iconSrc="/source/icon/시술건수 아이콘.png"
             value="12,678+"
             label="누적 시술건수"
           />
           <StatBox
-            icon={<MessageCircle className="w-4 h-4 text-[#8B7355]" />}
+            iconSrc="/source/icon/상담건수 아이콘.png"
             value="37,975+"
             label="누적 상담건수"
           />

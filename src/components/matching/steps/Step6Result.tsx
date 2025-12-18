@@ -1,496 +1,463 @@
-import React, { useMemo, useState } from 'react';
-import { CheckCircle, Clock, User, ChevronRight, Star, Sparkles, FileText, Target, TrendingUp } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'motion/react';
-import Slider from "react-slick";
+import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import {
+  ChevronRight,
+  Share2,
+  Download,
+  RotateCcw,
+  Phone,
+  Sparkles,
+  ScanLine,
+  Activity,
+  Target,
+  ArrowRight,
+  CheckCircle2,
+  Clock,
+  Star
+} from 'lucide-react';
+import { ReviewModal, ReviewData } from '../../result/OriginalReviewModal';
+import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+// --- landing02 imports ---
 import { REVIEWS } from '../../../data/reviews';
-import { ReviewData } from '@/types';
-import { ReviewModal } from '../../result/ReviewModal';
+import { ReviewData as Landing02ReviewData } from '@/types';
 
-type ScoredReview = ReviewData & {
-    score: number;
-    isContouringReview: boolean;
-};
+// --- Types ---
 
-interface UserData {
+interface Step6ResultProps {
+  userData: {
     name: string;
     phone: string;
     age: string;
     selectedTags: string[];
-    hasContouringExp: boolean | null;
+    hasContouringExp?: boolean | null;
     priority: string;
+  };
+  onRestart: () => void;
 }
 
-interface Props {
-    userData: UserData;
-    onRestart: () => void;
+type ScoredReview = Landing02ReviewData & {
+  score: number;
+  isContouringReview: boolean;
+};
+
+// --- Utility Functions ---
+
+function cn(...inputs: (string | undefined | null | false)[]) {
+  return twMerge(clsx(inputs));
 }
 
-export const Step6Result: React.FC<Props> = ({ userData, onRestart }) => {
-    const [selectedReview, setSelectedReview] = useState<ReviewData | null>(null);
+// 이미지 추출 함수 (landing02 로직)
+const extractImages = (content: string) => {
+  const lines = content.split('\n');
+  const images: string[] = [];
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if ((trimmed.endsWith('.jpg') || trimmed.endsWith('.png') || trimmed.endsWith('.webp')) &&
+      (trimmed.includes('-a-') || trimmed.includes('-b-'))) {
+      // public\ 또는 public/ 제거하고 /로 시작하게 변환
+      const path = '/' + trimmed.replace(/^public[\\\/]/, '').replace(/\\/g, '/');
+      images.push(path);
+    }
+  }
+  return images;
+};
 
-    // --- 매칭 로직 ---
-    const matchedReviews = useMemo((): ScoredReview[] => {
-        if (!REVIEWS || REVIEWS.length === 0) return [];
-        const results = REVIEWS.filter((review): review is ReviewData => !!review);
+// 후기 텍스트 추출 (이미지 경로 제외)
+const extractReviewText = (content: string) => {
+  const lines = content.split('\n');
+  const textLines: string[] = [];
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed &&
+        !trimmed.endsWith('.jpg') &&
+        !trimmed.endsWith('.png') &&
+        !trimmed.endsWith('.webp') &&
+        !trimmed.startsWith('match/')) {
+      textLines.push(trimmed);
+    }
+  }
+  const text = textLines.join(' ').slice(0, 200);
+  return text || '시술 후 만족스러운 결과를 얻었습니다. 자연스러운 변화가 마음에 들어요.';
+};
 
-        const scoredResults = results.map((review) => {
-            let score = 0;
-            const isContouringReview = review.memo?.includes('contouring') || false;
+// landing02 ReviewData -> 원본 ReviewData 변환
+const convertToOriginalReview = (review: ScoredReview): ReviewData => {
+  const images = extractImages(review.content);
+  const beforeImage = images.find(img => img.includes('-b-')) || '';
+  const afterImage = images.find(img => img.includes('-a-')) || '';
 
-            if (userData.hasContouringExp && isContouringReview) score += 1000;
-            if (review.age === userData.age) score += 100;
+  const ageMap: Record<string, string> = {
+    '20': '20대',
+    '30': '30대',
+    '40': '40대',
+    '50': '50대'
+  };
 
-            const tagMatchCount = review.tags.filter((tag) =>
-                userData.selectedTags.some(userTag => userTag.includes(tag))
-            ).length;
-            score += tagMatchCount * 10;
+  return {
+    id: review.id,
+    name: review.name || `${ageMap[review.age]} 고객`,
+    age: ageMap[review.age] || review.age,
+    rating: 5,
+    date: '2024.12',
+    content: extractReviewText(review.content),
+    tags: review.tags,
+    beforeImage,
+    afterImage
+  };
+};
 
-            return { ...review, score, isContouringReview };
-        });
+const ANALYSIS_KEYWORDS = [
+  "#30대_집중관리", "#무너진_턱선", "#탄력저하", "#맞춤윤곽", "#즉각리프팅"
+];
 
-        return scoredResults
-            .filter(item => {
-                if (userData.hasContouringExp && item.isContouringReview) return true;
-                if (item.age !== userData.age) return false;
-                return item.score > 0;
-            })
-            .sort((a, b) => b.score - a.score);
-    }, [userData]);
+// --- Component ---
 
-    // --- 키워드 생성 ---
-    const analysisKeywords = useMemo(() => {
-        const keywords = [`#${userData.age}대`];
-        if (userData.selectedTags.length > 0) {
-            keywords.push(...userData.selectedTags.slice(0, 2).map(tag => `#${tag}`));
-        }
-        if (userData.hasContouringExp) keywords.push('#윤곽후관리');
-        if (userData.priority) keywords.push(`#${userData.priority.split(' ')[0]}중요`);
-        return keywords.slice(0, 5);
-    }, [userData]);
+export const Step6Result: React.FC<Step6ResultProps> = ({ userData, onRestart }) => {
+  const [selectedReview, setSelectedReview] = useState<ReviewData | null>(null);
+  const [matchScore, setMatchScore] = useState(0);
 
-    // --- 이미지 추출 함수 ---
-    const extractImages = (content: string) => {
-        const lines = content.split('\n');
-        const images: string[] = [];
-        for (const line of lines) {
-            const trimmed = line.trim();
-            if ((trimmed.endsWith('.jpg') || trimmed.endsWith('.png')) &&
-                (trimmed.includes('-a-') || trimmed.includes('-b-'))) {
-                images.push('/' + trimmed.replace(/\\/g, '/'));
-            }
-        }
-        return images;
-    };
+  // Counter animation
+  useEffect(() => {
+    const target = 98;
+    const duration = 2000;
+    const interval = 20;
+    const step = target / (duration / interval);
 
-    // --- Slider 설정 ---
-    const sliderSettings = {
-        dots: true,
-        infinite: matchedReviews.length > 1,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoplay: matchedReviews.length > 1,
-        autoplaySpeed: 4000,
-        arrows: false,
-        dotsClass: "slick-dots !bottom-[-35px]",
-        accessibility: true,
-        focusOnSelect: false,
-    };
+    let current = 0;
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= target) {
+        setMatchScore(target);
+        clearInterval(timer);
+      } else {
+        setMatchScore(Math.floor(current));
+      }
+    }, interval);
 
-    // 매칭률 계산 (95% 기본 + 태그 매칭에 따라 조정)
-    const matchRate = Math.min(98, 90 + Math.floor(matchedReviews.length / 2));
+    return () => clearInterval(timer);
+  }, []);
 
-    return (
-        <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #4A3C1A 0%, #6B5A2F 30%, #8B7355 70%, #5C4A1F 100%)' }}>
-            <div className="w-full max-w-[800px] mx-auto overflow-hidden flex flex-col relative">
+  // --- 매칭 로직 (landing02) ---
+  const matchedReviews = useMemo((): ScoredReview[] => {
+    if (!REVIEWS || REVIEWS.length === 0) return [];
+    const results = REVIEWS.filter((review): review is Landing02ReviewData => !!review);
 
-                {/* ========== Header ========== */}
-                <div className="flex items-center justify-between px-6 py-4 relative z-10">
-                    <div className="flex items-center gap-3">
-                        <span className="text-2xl">👑</span>
-                        <span className="text-white font-bold text-lg">밸런스랩</span>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <span className="text-white/70 text-sm">🔔</span>
-                        <span className="text-white/70 text-sm">👤</span>
-                    </div>
-                </div>
+    const scoredResults = results.map((review) => {
+      let score = 0;
+      const isContouringReview = review.memo?.includes('contouring') || false;
 
-                {/* ========== Hero Section with Images ========== */}
-                <div className="relative px-6 pt-4 pb-8">
-                    {/* 3 Images Layout */}
-                    <div className="flex items-center justify-center gap-3 mb-6">
-                        {/* Left Image */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -30 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="w-24 h-28 rounded-xl overflow-hidden border-2 shadow-lg"
-                            style={{ borderColor: '#C9A962' }}
-                        >
-                            {matchedReviews[0] && (
-                                <img
-                                    src={extractImages(matchedReviews[0].content).find(img => img.includes('-b-')) || '/placeholder.jpg'}
-                                    alt="Before"
-                                    className="w-full h-full object-cover"
-                                />
-                            )}
-                        </motion.div>
+      if (userData.hasContouringExp && isContouringReview) score += 1000;
+      if (review.age === userData.age) score += 100;
 
-                        {/* Center - Main Display with Percentage */}
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.3, type: "spring" }}
-                            className="relative w-36 h-44 rounded-2xl overflow-hidden border-4 shadow-2xl"
-                            style={{ borderColor: '#D4B86A', background: 'linear-gradient(135deg, #5C4A1F 0%, #8B7355 100%)' }}
-                        >
-                            {matchedReviews[0] ? (
-                                <img
-                                    src={extractImages(matchedReviews[0].content).find(img => img.includes('-a-')) || '/placeholder.jpg'}
-                                    alt="After"
-                                    className="w-full h-full object-cover"
-                                />
-                            ) : (
-                                <div className="w-full h-full flex items-center justify-center">
-                                    <span className="text-white/50 text-sm">이미지</span>
-                                </div>
-                            )}
-                            {/* Percentage Badge */}
-                            <div className="absolute bottom-2 right-2 px-3 py-1 rounded-lg font-extrabold text-2xl"
-                                style={{ background: 'linear-gradient(135deg, #D4B86A, #F5D88E)', color: '#3D2E0F' }}>
-                                {matchRate}%
-                            </div>
-                        </motion.div>
+      const tagMatchCount = review.tags.filter((tag) =>
+        userData.selectedTags.some(userTag => userTag.includes(tag))
+      ).length;
+      score += tagMatchCount * 10;
 
-                        {/* Right Image */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 30 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="w-24 h-28 rounded-xl overflow-hidden border-2 shadow-lg"
-                            style={{ borderColor: '#C9A962' }}
-                        >
-                            {matchedReviews[1] && (
-                                <img
-                                    src={extractImages(matchedReviews[1].content).find(img => img.includes('-a-')) || '/placeholder.jpg'}
-                                    alt="Sample"
-                                    className="w-full h-full object-cover"
-                                />
-                            )}
-                        </motion.div>
-                    </div>
+      return { ...review, score, isContouringReview };
+    });
 
-                    {/* User Info */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 }}
-                        className="text-center"
-                    >
-                        <h1 className="text-xl font-bold text-white mb-2">
-                            {userData.name}님의 맞춤 분석 완료
-                        </h1>
-                        <p className="text-sm" style={{ color: '#D4B86A' }}>
-                            AI가 {matchedReviews.length}건의 유사 케이스를 찾았습니다
-                        </p>
-                    </motion.div>
-                </div>
+    return scoredResults
+      .filter(item => {
+        if (userData.hasContouringExp && item.isContouringReview) return true;
+        if (item.age !== userData.age) return false;
+        return item.score > 0;
+      })
+      .sort((a, b) => b.score - a.score);
+  }, [userData]);
 
-                {/* ========== 3 Column Info Cards ========== */}
-                <div className="px-4 pb-6">
-                    <div className="grid grid-cols-3 gap-3">
-                        {/* AI 분석 요약 */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.6 }}
-                            className="rounded-2xl p-4 border"
-                            style={{
-                                background: 'linear-gradient(180deg, rgba(60, 48, 20, 0.95) 0%, rgba(80, 65, 30, 0.9) 100%)',
-                                borderColor: 'rgba(212, 184, 106, 0.3)'
-                            }}
-                        >
-                            <div className="flex items-center gap-2 mb-3">
-                                <FileText size={16} style={{ color: '#D4B86A' }} />
-                                <span className="text-white font-bold text-xs">AI 분석 요약</span>
-                            </div>
-                            <ul className="space-y-1.5 text-[11px]" style={{ color: '#E8D9B0' }}>
-                                <li>• {userData.age}대 맞춤 분석</li>
-                                <li>• {userData.selectedTags[0] || '피부'} 고민 파악</li>
-                                <li>• 최적 솔루션 도출</li>
-                            </ul>
-                        </motion.div>
+  // 변환된 리뷰 (원본 형식)
+  const displayReviews = useMemo(() => {
+    return matchedReviews.slice(0, 10).map(convertToOriginalReview);
+  }, [matchedReviews]);
 
-                        {/* 매칭 포인트 */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.7 }}
-                            className="rounded-2xl p-4 border"
-                            style={{
-                                background: 'linear-gradient(180deg, rgba(60, 48, 20, 0.95) 0%, rgba(80, 65, 30, 0.9) 100%)',
-                                borderColor: 'rgba(212, 184, 106, 0.3)'
-                            }}
-                        >
-                            <div className="flex items-center gap-2 mb-3">
-                                <Target size={16} style={{ color: '#D4B86A' }} />
-                                <span className="text-white font-bold text-xs">매칭 포인트</span>
-                            </div>
-                            <ul className="space-y-1.5 text-[11px]" style={{ color: '#E8D9B0' }}>
-                                <li>• 동일 연령대 케이스</li>
-                                <li>• 유사 고민 매칭</li>
-                                <li>• 만족도 높은 시술</li>
-                            </ul>
-                        </motion.div>
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    arrows: false,
+    variableWidth: true,
+    centerMode: true,
+    className: "review-slider",
+  };
 
-                        {/* 기대 효과 */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.8 }}
-                            className="rounded-2xl p-4 border"
-                            style={{
-                                background: 'linear-gradient(180deg, rgba(60, 48, 20, 0.95) 0%, rgba(80, 65, 30, 0.9) 100%)',
-                                borderColor: 'rgba(212, 184, 106, 0.3)'
-                            }}
-                        >
-                            <div className="flex items-center gap-2 mb-3">
-                                <TrendingUp size={16} style={{ color: '#D4B86A' }} />
-                                <span className="text-white font-bold text-xs">기대 효과</span>
-                            </div>
-                            <ul className="space-y-1.5 text-[11px]" style={{ color: '#E8D9B0' }}>
-                                <li>• 자연스러운 개선</li>
-                                <li>• 빠른 일상 복귀</li>
-                                <li>• 높은 만족도</li>
-                            </ul>
-                        </motion.div>
-                    </div>
-                </div>
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans pb-24 overflow-x-hidden relative">
+      {/* Background Gradients */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-[500px] bg-amber-500/10 blur-[120px] rounded-full mix-blend-screen" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-600/10 blur-[100px] rounded-full mix-blend-screen" />
+      </div>
 
-                {/* ========== CTA Button ========== */}
-                <div className="px-6 pb-6">
-                    <motion.a
-                        href="tel:1661-8581"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.9 }}
-                        className="block w-full py-4 rounded-2xl text-center font-bold text-lg shadow-xl"
-                        style={{
-                            background: 'linear-gradient(135deg, #D4B86A 0%, #F5D88E 50%, #D4B86A 100%)',
-                            color: '#3D2E0F',
-                            boxShadow: '0 8px 32px rgba(212, 184, 106, 0.4)'
-                        }}
-                    >
-                        상담신청
-                    </motion.a>
-                </div>
+      <ReviewModal
+        isOpen={!!selectedReview}
+        onClose={() => setSelectedReview(null)}
+        review={selectedReview}
+      />
 
-                {/* ========== Keywords Section ========== */}
-                <div className="px-6 pb-6">
-                    <div className="flex flex-wrap gap-2 justify-center">
-                        {analysisKeywords.map((tag, i) => (
-                            <span
-                                key={i}
-                                className="px-3 py-1.5 text-xs font-medium rounded-full"
-                                style={{
-                                    background: 'rgba(212, 184, 106, 0.15)',
-                                    color: '#D4B86A',
-                                    border: '1px solid rgba(212, 184, 106, 0.3)'
-                                }}
-                            >
-                                {tag}
-                            </span>
-                        ))}
-                    </div>
-                </div>
-
-                {/* ========== Case Review Slider ========== */}
-                <div className="py-8 px-6 relative" style={{ background: 'rgba(0, 0, 0, 0.2)' }}>
-                    <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                            <Star size={18} style={{ color: '#D4B86A' }} fill="#D4B86A" />
-                            맞춤 후기
-                        </h3>
-                        <span className="text-xs font-semibold flex items-center cursor-pointer" style={{ color: '#D4B86A' }}>
-                            더보기 <ChevronRight size={14} />
-                        </span>
-                    </div>
-
-                    {matchedReviews.length > 0 ? (
-                        <div className="pb-10" style={{ height: '400px' }}>
-                            <Slider {...sliderSettings}>
-                                {matchedReviews.slice(0, 10).map((review, index) => {
-                                    const images = extractImages(review.content);
-                                    const beforeImage = images.find(img => img.includes('-b-'));
-                                    const afterImage = images.find(img => img.includes('-a-'));
-
-                                    return (
-                                        <div key={review.id} className="px-1">
-                                            <div
-                                                onClick={() => setSelectedReview(review)}
-                                                className="overflow-hidden shadow-lg rounded-2xl cursor-pointer hover:shadow-xl transition-shadow flex flex-col border"
-                                                style={{
-                                                    height: '360px',
-                                                    background: 'linear-gradient(180deg, rgba(60, 48, 20, 0.98) 0%, rgba(45, 36, 15, 0.98) 100%)',
-                                                    borderColor: 'rgba(212, 184, 106, 0.3)'
-                                                }}
-                                            >
-                                                <div className="relative w-full flex-shrink-0 flex" style={{ height: '180px' }}>
-                                                    <div className="absolute top-2 right-2 px-2.5 py-1 rounded-full font-medium text-[10px] z-10"
-                                                        style={{ background: 'rgba(212, 184, 106, 0.9)', color: '#3D2E0F' }}>
-                                                        {index + 1} / {Math.min(matchedReviews.length, 10)}
-                                                    </div>
-
-                                                    <div className="w-1/2 relative">
-                                                        {beforeImage ? (
-                                                            <img src={beforeImage} alt="Before" className="w-full h-full object-cover" />
-                                                        ) : (
-                                                            <div className="w-full h-full flex items-center justify-center" style={{ background: '#2D240F', color: '#6B5A2F' }}>Before</div>
-                                                        )}
-                                                        <div className="absolute top-2 left-2 text-white text-[10px] px-2 py-0.5 rounded" style={{ background: 'rgba(0,0,0,0.6)' }}>Before</div>
-                                                    </div>
-                                                    <div className="w-1/2 relative">
-                                                        {afterImage ? (
-                                                            <img src={afterImage} alt="After" className="w-full h-full object-cover" />
-                                                        ) : (
-                                                            <div className="w-full h-full flex items-center justify-center" style={{ background: '#2D240F', color: '#6B5A2F' }}>After</div>
-                                                        )}
-                                                        <div className="absolute top-2 left-2 text-white text-[10px] px-2 py-0.5 rounded" style={{ background: '#D4B86A', color: '#3D2E0F' }}>After</div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="flex-1 p-4 flex flex-col justify-between">
-                                                    <div>
-                                                        <div className="flex items-center justify-between mb-3">
-                                                            <span className="text-xs px-2 py-1 rounded" style={{ background: 'rgba(212, 184, 106, 0.15)', color: '#D4B86A', border: '1px solid rgba(212, 184, 106, 0.3)' }}>
-                                                                {review.age}대 / {review.tags.slice(0, 2).join(' / ')}
-                                                            </span>
-                                                            <span className="text-sm tracking-tighter" style={{ color: '#D4B86A' }}>★★★★★</span>
-                                                        </div>
-                                                        <div className="flex items-center gap-1.5 text-sm px-3 py-2 rounded-lg w-fit font-semibold mb-3" style={{ background: 'rgba(212, 184, 106, 0.15)', color: '#D4B86A' }}>
-                                                            <Star size={14} fill="currentColor" />
-                                                            {review.targets.includes('mid') && review.targets.includes('lower') ? '중안면+하안면' :
-                                                                review.targets.includes('mid') ? '중안면 개선' :
-                                                                    review.targets.includes('lower') ? '하안면 개선' : '전체 개선'} 케이스
-                                                        </div>
-                                                        <div className="flex flex-wrap gap-1.5">
-                                                            {[
-                                                                `#${review.age}대`,
-                                                                ...review.tags.slice(0, 2).map(tag => `#${tag}`),
-                                                            ].map((tag, i) => (
-                                                                <span key={i} className="text-[11px] px-2 py-1 rounded-full font-medium"
-                                                                    style={{ background: 'rgba(212, 184, 106, 0.1)', color: '#C9A962', border: '1px solid rgba(212, 184, 106, 0.2)' }}>
-                                                                    {tag}
-                                                                </span>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                    <div className="pt-3 border-t" style={{ borderColor: 'rgba(212, 184, 106, 0.2)' }}>
-                                                        <span className="text-xs font-bold flex items-center justify-center gap-1" style={{ color: '#D4B86A' }}>
-                                                            자세히 보기 <ChevronRight size={12} />
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </Slider>
-                        </div>
-                    ) : (
-                        <div className="text-center py-10 rounded-xl" style={{ background: 'rgba(60, 48, 20, 0.5)', color: '#8B7355' }}>
-                            매칭되는 사례를 찾지 못했습니다.
-                        </div>
-                    )}
-                </div>
-
-                {/* ========== Progress Timeline ========== */}
-                <div className="px-6 py-10 relative" style={{ background: 'rgba(0, 0, 0, 0.15)' }}>
-                    <h3 className="text-lg font-bold text-white mb-8 text-center">진행 과정</h3>
-                    <div className="relative flex justify-between items-center px-4">
-                        <div className="absolute top-1/2 left-8 right-8 h-0.5 -z-10 transform -translate-y-1/2" style={{ background: 'rgba(212, 184, 106, 0.3)' }} />
-                        <div className="absolute top-1/2 left-8 w-1/3 h-0.5 transform -translate-y-1/2" style={{ background: 'linear-gradient(90deg, #D4B86A, #F5D88E)' }} />
-
-                        <div className="flex flex-col items-center gap-3">
-                            <div className="w-10 h-10 rounded-full flex items-center justify-center shadow-lg" style={{ background: 'linear-gradient(135deg, #D4B86A, #F5D88E)', color: '#3D2E0F' }}>
-                                <CheckCircle size={20} />
-                            </div>
-                            <span className="text-xs font-bold" style={{ color: '#D4B86A' }}>접수완료</span>
-                        </div>
-
-                        <div className="flex flex-col items-center gap-3">
-                            <div className="relative">
-                                <motion.div
-                                    animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
-                                    transition={{ repeat: Infinity, duration: 2 }}
-                                    className="absolute inset-0 rounded-full"
-                                    style={{ background: '#D4B86A' }}
-                                />
-                                <div className="w-10 h-10 relative rounded-full flex items-center justify-center shadow-lg z-10 border-2"
-                                    style={{ background: 'linear-gradient(135deg, #D4B86A, #F5D88E)', borderColor: '#F5D88E', color: '#3D2E0F' }}>
-                                    <User size={18} />
-                                </div>
-                            </div>
-                            <span className="text-xs font-bold" style={{ color: '#F5D88E' }}>배정중</span>
-                        </div>
-
-                        <div className="flex flex-col items-center gap-3">
-                            <div className="w-10 h-10 rounded-full flex items-center justify-center border-2" style={{ background: 'rgba(212, 184, 106, 0.1)', borderColor: 'rgba(212, 184, 106, 0.3)', color: 'rgba(212, 184, 106, 0.5)' }}>
-                                <Clock size={18} />
-                            </div>
-                            <span className="text-xs font-medium" style={{ color: 'rgba(212, 184, 106, 0.5)' }}>해피콜</span>
-                        </div>
-                    </div>
-                </div>
-
-                {/* ========== Bottom Buttons ========== */}
-                <div className="px-6 py-8" style={{ background: 'rgba(0, 0, 0, 0.2)' }}>
-                    {/* Coupon */}
-                    <div className="relative mb-6 rounded-xl p-4 flex items-center justify-between overflow-hidden"
-                        style={{ background: 'linear-gradient(135deg, rgba(212, 184, 106, 0.15), rgba(245, 216, 142, 0.1))', border: '1px solid rgba(212, 184, 106, 0.3)' }}>
-                        <div className="absolute left-[-8px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full" style={{ background: '#4A3C1A' }} />
-                        <div className="absolute right-[-8px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full" style={{ background: '#4A3C1A' }} />
-
-                        <div className="ml-2">
-                            <span className="text-[10px] font-bold" style={{ color: '#D4B86A' }}>SPECIAL GIFT</span>
-                            <p className="text-base font-extrabold text-white">AI 정밀 진단 무료권</p>
-                        </div>
-                        <Sparkles size={24} style={{ color: '#D4B86A' }} />
-                    </div>
-
-                    {/* Buttons */}
-                    <div className="flex gap-3">
-                        <button
-                            onClick={onRestart}
-                            className="flex-1 h-14 rounded-xl font-bold text-base transition-colors"
-                            style={{ background: 'rgba(212, 184, 106, 0.1)', border: '2px solid rgba(212, 184, 106, 0.4)', color: '#D4B86A' }}
-                        >
-                            처음으로
-                        </button>
-                        <a
-                            href="tel:1661-8581"
-                            className="flex-[2] h-14 rounded-xl shadow-lg font-bold text-lg flex items-center justify-center transition-all hover:opacity-90"
-                            style={{
-                                background: 'linear-gradient(135deg, #D4B86A 0%, #F5D88E 50%, #D4B86A 100%)',
-                                color: '#3D2E0F',
-                                boxShadow: '0 8px 24px rgba(212, 184, 106, 0.4)'
-                            }}
-                        >
-                            상담 연결하기
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-
-            {/* Review Modal */}
-            <ReviewModal
-                review={selectedReview}
-                onClose={() => setSelectedReview(null)}
-            />
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-40 bg-slate-950/80 backdrop-blur-md border-b border-white/5 h-14 flex items-center justify-between px-4">
+        <div className="flex items-center gap-1.5 text-amber-500 font-bold text-lg">
+          <Sparkles size={18} />
+          <span>BALANCE LAB</span>
         </div>
-    );
+        <div className="flex gap-4">
+          <button className="text-slate-400 hover:text-white transition-colors">
+            <Share2 size={20} />
+          </button>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="pt-20 px-4 relative z-10 max-w-lg mx-auto space-y-8">
+
+        {/* User Greeting */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center space-y-2"
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-mono mb-2">
+            <ScanLine size={12} />
+            AI ANALYSIS COMPLETE
+          </div>
+          <h1 className="text-2xl font-bold leading-tight">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500">
+              {userData.name}님
+            </span>의<br />
+            얼굴 분석 결과입니다.
+          </h1>
+          <p className="text-slate-400 text-sm">
+            AI가 {userData.age}대 {userData.priority} 고민 케이스<br/>
+            <span className="text-white font-semibold">{matchedReviews.length > 0 ? `${matchedReviews.length}건` : '12,482건'}</span>을 분석했습니다.
+          </p>
+        </motion.div>
+
+        {/* Hero Score Card */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="relative p-1 rounded-3xl bg-gradient-to-b from-amber-500/20 to-transparent"
+        >
+          <div className="relative bg-slate-900/80 backdrop-blur-xl border border-amber-500/20 rounded-[22px] p-8 text-center overflow-hidden">
+             {/* Scanning Effect Overlay */}
+             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-amber-500/5 to-transparent animate-scan pointer-events-none" />
+
+             <div className="relative z-10">
+               <p className="text-slate-400 text-sm font-medium mb-1">나와 유사한 사례 매칭률</p>
+               <div className="flex items-center justify-center gap-1 mb-2">
+                 <span className="text-6xl font-black text-white tracking-tighter drop-shadow-lg">
+                   {matchScore}
+                 </span>
+                 <span className="text-2xl font-bold text-amber-500 mb-2">%</span>
+               </div>
+
+               {/* Progress Bar */}
+               <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden mb-4">
+                 <motion.div
+                   className="h-full bg-gradient-to-r from-amber-600 to-amber-400"
+                   initial={{ width: 0 }}
+                   animate={{ width: `${matchScore}%` }}
+                   transition={{ duration: 2, ease: "easeOut" }}
+                 />
+               </div>
+
+               <div className="inline-flex items-center gap-1.5 text-xs text-amber-200/80 bg-amber-950/40 px-3 py-1.5 rounded-lg border border-amber-900/50">
+                 <Sparkles size={12} />
+                 <span>상위 1% 매칭 정확도</span>
+               </div>
+             </div>
+          </div>
+        </motion.div>
+
+        {/* 3 Column Info Cards */}
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            { icon: <Activity className="text-blue-400" size={20} />, label: "분석 요약", value: "복합형" },
+            { icon: <Target className="text-red-400" size={20} />, label: "핵심 포인트", value: userData.priority || "자연스러움" },
+            { icon: <CheckCircle2 className="text-emerald-400" size={20} />, label: "기대 효과", value: "92%" },
+          ].map((item, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 + idx * 0.1 }}
+              className="bg-slate-900/50 border border-white/5 rounded-2xl p-4 flex flex-col items-center justify-center text-center gap-2 hover:bg-slate-800/50 transition-colors"
+            >
+              <div className="bg-slate-950 p-2 rounded-full border border-white/5 shadow-inner">
+                {item.icon}
+              </div>
+              <div className="space-y-0.5">
+                <span className="block text-xs text-slate-500">{item.label}</span>
+                <span className="block text-sm font-bold text-slate-200">{item.value}</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Keywords Section */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7 }}
+          className="flex flex-wrap gap-2 justify-center"
+        >
+          {userData.selectedTags.concat(ANALYSIS_KEYWORDS).slice(0, 6).map((keyword, i) => (
+            <span
+              key={i}
+              className="px-3 py-1.5 bg-slate-800/80 border border-slate-700 text-slate-300 rounded-lg text-xs font-medium"
+            >
+              {keyword.startsWith('#') ? keyword : `#${keyword}`}
+            </span>
+          ))}
+        </motion.div>
+
+        {/* Case Review Slider */}
+        <section className="space-y-4">
+          <div className="flex items-center justify-between px-2">
+            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <span className="w-1 h-5 bg-amber-500 rounded-full" />
+              유사 케이스 매칭 결과
+            </h3>
+
+          </div>
+
+          {displayReviews.length > 0 ? (
+            <div className="slider-container -mx-4">
+              <style>{`
+                .slider-container .slick-slide {
+                  padding: 0 8px;
+                }
+                .slider-container .slick-track {
+                  display: flex;
+                  align-items: stretch;
+                }
+              `}</style>
+              <Slider {...sliderSettings} dots={false}>
+                {displayReviews.map((review) => (
+                  <div key={review.id} className="outline-none h-full" style={{ width: 300 }}>
+                    <div
+                      onClick={() => setSelectedReview(review)}
+                      className="cursor-pointer bg-slate-900 border border-white/10 rounded-2xl overflow-hidden h-full flex flex-col hover:border-amber-500/50 transition-colors group"
+                    >
+                      <div className="relative h-48 bg-slate-800">
+                        <div className="grid grid-cols-2 h-full w-full">
+                          <div className="relative border-r border-black/20">
+                             {review.beforeImage ? (
+                               <img src={review.beforeImage} alt="Before" className="w-full h-full object-cover" />
+                             ) : (
+                               <div className="w-full h-full flex items-center justify-center bg-slate-800 text-slate-500">Before</div>
+                             )}
+                             <div className="absolute top-2 left-2 bg-black/70 px-2 py-0.5 rounded text-[10px] font-bold">BEFORE</div>
+                          </div>
+                          <div className="relative">
+                             {review.afterImage ? (
+                               <img src={review.afterImage} alt="After" className="w-full h-full object-cover" />
+                             ) : (
+                               <div className="w-full h-full flex items-center justify-center bg-slate-800 text-slate-500">After</div>
+                             )}
+                             <div className="absolute top-2 left-2 bg-amber-500 text-black px-2 py-0.5 rounded text-[10px] font-bold">AFTER</div>
+                          </div>
+                        </div>
+                        <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 to-transparent">
+                          <div className="flex items-center justify-between">
+                            <span className="text-white font-bold text-sm">{review.name}</span>
+                            <div className="flex text-amber-400">
+                              {[...Array(5)].map((_, i) => (
+                                <Star key={i} size={10} fill={i < review.rating ? "currentColor" : "none"} />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="p-4 flex-1 flex flex-col justify-between">
+                        <p className="text-sm text-slate-300 line-clamp-2 mb-3">
+                          {review.content}
+                        </p>
+                        <div className="flex flex-wrap gap-1">
+                          {review.tags.slice(0, 2).map((tag, i) => (
+                            <span key={i} className="text-[10px] px-2 py-1 bg-slate-800 rounded text-slate-400">
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </Slider>
+            </div>
+          ) : (
+            <div className="text-center py-10 rounded-xl bg-slate-900/50 text-slate-500">
+              매칭되는 사례를 찾지 못했습니다.
+            </div>
+          )}
+        </section>
+
+        {/* Process Timeline */}
+        <section className="bg-slate-900/30 border border-white/5 rounded-2xl p-6">
+           <h3 className="text-base font-bold text-white mb-6">진행 상황 안내</h3>
+           <div className="relative flex justify-between items-center z-0">
+             {/* Line */}
+             <div className="absolute top-1/2 left-0 w-full h-0.5 bg-slate-800 -z-10" />
+             <div className="absolute top-1/2 left-0 w-1/2 h-0.5 bg-amber-500/50 -z-10" />
+
+             {[
+               { step: 1, label: "접수완료", active: true },
+               { step: 2, label: "분석완료", active: true, current: true },
+               { step: 3, label: "상담배정", active: false }
+             ].map((item, idx) => (
+               <div key={idx} className="flex flex-col items-center gap-2 bg-slate-950 px-2">
+                 <div className={cn(
+                   "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all",
+                   item.current ? "bg-amber-500 text-black shadow-[0_0_15px_rgba(245,158,11,0.5)] scale-110" :
+                   item.active ? "bg-slate-700 text-slate-300" : "bg-slate-800 text-slate-600"
+                 )}>
+                   {item.active ? <CheckCircle2 size={16} /> : item.step}
+                 </div>
+                 <span className={cn(
+                   "text-xs font-medium",
+                   item.current ? "text-amber-500" : "text-slate-500"
+                 )}>{item.label}</span>
+               </div>
+             ))}
+           </div>
+        </section>
+
+        {/* Bottom Spacer */}
+        <div className="h-12" />
+      </main>
+
+      {/* Sticky Bottom CTA */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-slate-950 via-slate-950/95 to-transparent z-50">
+        <div className="max-w-lg mx-auto flex gap-3">
+          <button
+            className="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-medium rounded-xl py-4 flex items-center justify-center gap-2 transition-all border border-slate-700"
+            onClick={onRestart}
+          >
+            <RotateCcw size={18} />
+            다시하기
+          </button>
+          <a
+            href="tel:1661-8581"
+            className="flex-[2] bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold rounded-xl py-4 flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all active:scale-[0.98]"
+          >
+            <Phone size={18} />
+            무료 상담 신청하기
+          </a>
+        </div>
+      </div>
+    </div>
+  );
 };

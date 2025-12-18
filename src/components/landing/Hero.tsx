@@ -22,7 +22,7 @@ export const Hero = () => {
           alt="Background"
           loading="eager"
           decoding="async"
-          fetchPriority="high"
+          fetchpriority="high"
           className="absolute inset-0 w-full h-full object-cover object-top"
         />
       </div>
@@ -62,7 +62,7 @@ export const Hero = () => {
               alt="Balance Lab Model"
               loading="eager"
               decoding="async"
-              fetchPriority="high"
+              fetchpriority="high"
               className="relative w-full h-full object-cover"
               style={{ objectPosition: '50% center' }}
             />
@@ -105,11 +105,21 @@ export const Hero = () => {
               style={{ background: 'linear-gradient(90deg, #C9A962, #E8D5A3, #B8943D)' }}
             />
             <p
-              className="text-3xl leading-relaxed break-keep text-center"
-              style={{ fontFamily: "'Nanum Pen Script', cursive", color: '#6B5A2F' }}
+              className="text-lg leading-relaxed break-keep text-center font-medium"
+              style={{ color: '#5C4A1F' }}
             >
-              당신이 꿈꾸던 맑은 라인, <br />
-              <strong style={{ color: '#4A3D1F' }}>밸런스랩</strong>에서 시작됩니다.
+              리프팅 업계 최초 <br />
+              <strong
+                className="text-2xl font-bold"
+                style={{
+                  background: 'linear-gradient(135deg, #B8943D 0%, #D4B86A 50%, #8B6914 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  textShadow: '0 0 20px rgba(184, 148, 61, 0.3)'
+                }}
+              >
+                AI 맞춤 매칭 시스템
+              </strong> 도입!
             </p>
           </motion.div>
 

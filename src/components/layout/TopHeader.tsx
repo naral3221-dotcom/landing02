@@ -24,7 +24,7 @@ export const TopHeader = () => {
                             src={homeIcon}
                             alt="홈페이지로 이동"
                             className="w-5 h-5 object-contain"
-                            style={{ filter: 'invert(65%) sepia(50%) saturate(500%) hue-rotate(5deg) brightness(0.9)' }}
+                            style={{ filter: 'brightness(0)' }}
                         />
                     </a>
                 </section>
@@ -46,7 +46,7 @@ export const TopHeader = () => {
                             src={callIcon}
                             alt="전화 상담"
                             className="w-5 h-5 object-contain"
-                            style={{ filter: 'invert(65%) sepia(50%) saturate(500%) hue-rotate(5deg) brightness(0.9)' }}
+                            style={{ filter: 'brightness(0)' }}
                         />
                     </a>
 
@@ -60,7 +60,7 @@ export const TopHeader = () => {
                             src={kakaoIcon}
                             alt="카카오톡 상담"
                             className="w-5 h-5 object-contain"
-                            style={{ filter: 'invert(65%) sepia(50%) saturate(500%) hue-rotate(5deg) brightness(0.9)' }}
+                            style={{ filter: 'brightness(0)' }}
                         />
                     </a>
                 </section>

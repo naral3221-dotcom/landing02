@@ -163,7 +163,7 @@ export const Step4Question: React.FC<Props> = ({ onNext, defaultValues }) => {
                     style={isValid ? { background: 'linear-gradient(135deg, #8B7355 0%, #C9A962 100%)', boxShadow: '0 10px 30px -5px rgba(139, 115, 85, 0.4)' } : {}}
                 >
                     {isValid && (
-                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: 'linear-gradient(135deg, rgba(201, 169, 98, 0.2), rgba(139, 115, 85, 0.2))' }} />
+                        <div className="absolute inset-[2px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05))' }} />
                     )}
                     <span className="relative z-10">내 맞춤 결과 분석하기</span>
                 </button>
