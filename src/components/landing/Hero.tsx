@@ -1,8 +1,8 @@
 import { motion } from 'motion/react';
-import modelImage from '/source/main model.png';
-import mainBg from '/source/main bg.png';
+import modelImage from '/source/main model.webp';
+import mainBg from '/source/main bg.webp';
 import titleImage from '/source/find your balance.webp';
-import bannerImage from '/source/banner.png';
+import bannerImage from '/source/banner.webp';
 
 /* ============================================================================
    HERO SECTION

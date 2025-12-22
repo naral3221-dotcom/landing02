@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "gemini": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "node",
+        "C:/Users/USER/Desktop/publish/AGENT/AGENT/mcp-servers/gemini-server/index.js"
+      ],
+      "env": {
+        "GEMINI_API_KEY": "AIzaSyAUf8DWErZxZl2vP2V5VtXX4IFSEmLa4Lo"
+      }
+    },
+    "gpt": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "node",
+        "C:/Users/USER/Desktop/publish/AGENT/AGENT/mcp-servers/gpt-server/index.js"
+      ],
+      "env": {
+        "OPENAI_API_KEY": "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"
+      }
+    }
+  }
+}

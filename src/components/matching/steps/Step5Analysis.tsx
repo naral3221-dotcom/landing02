@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'motion/react';
 import { Lock, Check, ShieldCheck, Sparkles } from 'lucide-react';
 import { REVIEWS } from '@/data/reviews';
+import { getAssetPath } from '@/utils/paths';
 
 interface Props {
     userName: string; // Step 1에서 받은 이름 ("홍길동"님)
@@ -109,28 +110,45 @@ export const Step5Analysis: React.FC<Props> = ({ userName, onNext }) => {
 
     // 후기에서 전/후 이미지 경로 추출
     const { beforeImage, afterImage } = useMemo(() => {
-        if (!sampleReview?.content) return { beforeImage: null, afterImage: null };
+        if (!sampleReview?.content) {
+            console.log('[Step5] No sample review content');
+            return { beforeImage: null, afterImage: null };
+        }
 
         const content = sampleReview.content;
 
-        // "✅시술 전" 섹션에서 첫 번째 이미지 추출
-        const beforeSectionMatch = content.match(/✅시술 전[\s\S]*?(?=✅시술 후|$)/);
+        // "✅시술 전" 섹션에서 첫 번째 이미지 추출 (box 태그 포함 대응)
+        const beforeSectionMatch = content.match(/(<box>)?✅시술 전(<\/box>)?[\s\S]*?(?=(<box>)?✅시술 후|$)/);
         let beforeImg = null;
         if (beforeSectionMatch) {
             const beforeImageMatch = beforeSectionMatch[0].match(/public\\match\\[^\n]+\.webp/);
             if (beforeImageMatch) {
-                beforeImg = '/' + beforeImageMatch[0].replace(/\\/g, '/');
+                // public\ 제거 후 경로 생성
+                const cleanPath = beforeImageMatch[0].replace(/\\/g, '/').replace(/^public\//, '/');
+                beforeImg = getAssetPath(cleanPath);
+                console.log('[Step5] Before image:', beforeImg);
+            } else {
+                console.log('[Step5] No before image match found');
             }
+        } else {
+            console.log('[Step5] No before section match');
         }
 
-        // "✅시술 후" 섹션에서 첫 번째 이미지 추출
-        const afterSectionMatch = content.match(/✅시술 후[\s\S]*?(?=<title>|$)/);
+        // "✅시술 후" 섹션에서 첫 번째 이미지 추출 (box 태그 포함 대응)
+        const afterSectionMatch = content.match(/(<box>)?✅시술 후(<\/box>)?[\s\S]*?(?=<title>|$)/);
         let afterImg = null;
         if (afterSectionMatch) {
             const afterImageMatch = afterSectionMatch[0].match(/public\\match\\[^\n]+\.webp/);
             if (afterImageMatch) {
-                afterImg = '/' + afterImageMatch[0].replace(/\\/g, '/');
+                // public\ 제거 후 경로 생성
+                const cleanPath = afterImageMatch[0].replace(/\\/g, '/').replace(/^public\//, '/');
+                afterImg = getAssetPath(cleanPath);
+                console.log('[Step5] After image:', afterImg);
+            } else {
+                console.log('[Step5] No after image match found');
             }
+        } else {
+            console.log('[Step5] No after section match');
         }
 
         return { beforeImage: beforeImg, afterImage: afterImg };

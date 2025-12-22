@@ -1,5 +1,6 @@
 import { motion } from 'motion/react';
 import { Sparkles, Scan } from 'lucide-react';
+import { getAssetPath } from '../../utils/paths';
 
 const GlowingCheckIcon = () => (
   <div className="relative shrink-0 w-6 h-6">
@@ -61,7 +62,7 @@ export const DbCtaSection = ({ onScrollToForm }: DbCtaProps) => {
       {/* 백그라운드 이미지 */}
       <div
         className="absolute inset-0 opacity-40 mix-blend-overlay pointer-events-none bg-cover bg-center"
-        style={{ backgroundImage: `url('/bg/group-6.png')` }}
+        style={{ backgroundImage: `url('${getAssetPath('/bg/group-6.webp')}')` }}
       />
       {/* 노이즈 텍스처 - 질감 강화 */}
       <div

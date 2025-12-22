@@ -1,6 +1,7 @@
 import { forwardRef } from 'react';
 import { motion } from 'motion/react';
 import { AiMatchingSystem } from '../matching';
+import { getAssetPath } from '../../utils/paths';
 
 /* ============================================================================
    AI MATCHING FORM SECTION
@@ -17,7 +18,7 @@ const StatBox = ({ iconSrc, value, label }: { iconSrc: string; value: string; la
   >
     <div className="flex flex-col items-center gap-3">
       <div className="bg-[#f8f5f2] p-1.5 rounded-lg">
-        <img src={iconSrc} alt={label} className="w-6 h-6 object-contain" />
+        <img src={getAssetPath(iconSrc)} alt={label} className="w-6 h-6 object-contain" />
       </div>
       <div className="font-bold text-[#1e293b] text-lg leading-none tracking-wide">{value}</div>
       <div className="text-[10px] text-slate-400 font-medium leading-none tracking-wider">{label}</div>
@@ -81,22 +82,22 @@ export const AiMatchingFormSection = forwardRef<HTMLElement>((_, ref) => {
           className="grid grid-cols-2 gap-3 mb-8"
         >
           <StatBox
-            iconSrc="/source/icon/누적매칭 icon.png"
+            iconSrc="/source/icon/누적매칭 icon.webp"
             value="1,247+"
             label="누적 매칭 성공"
           />
           <StatBox
-            iconSrc="/source/icon/고객만족도 아이콘.png"
+            iconSrc="/source/icon/고객만족도 아이콘.webp"
             value="98.2%"
             label="고객 만족도"
           />
           <StatBox
-            iconSrc="/source/icon/시술건수 아이콘.png"
+            iconSrc="/source/icon/시술건수 아이콘.webp"
             value="12,678+"
             label="누적 시술건수"
           />
           <StatBox
-            iconSrc="/source/icon/상담건수 아이콘.png"
+            iconSrc="/source/icon/상담건수 아이콘.webp"
             value="37,975+"
             label="누적 상담건수"
           />

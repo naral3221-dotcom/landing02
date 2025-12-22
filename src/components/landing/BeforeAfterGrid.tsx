@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import { ImageIcon } from 'lucide-react';
+import { getAssetPath } from '@/utils/paths';
 
 /* ============================================================================
    BEFORE/AFTER GRID SECTION
@@ -15,8 +16,8 @@ const cases = Array.from({ length: 10 }).map((_, i) => {
   return {
     id: caseNum,
     title: `Case ${caseNum}`,
-    beforeSrc: `/b&a/${caseNum}-b-1.jpg`,
-    afterSrc: `/b&a/${caseNum}-a-1.jpg`
+    beforeSrc: getAssetPath(`/b&a/${caseNum}-b-1.webp`),
+    afterSrc: getAssetPath(`/b&a/${caseNum}-a-1.webp`)
   };
 });
 

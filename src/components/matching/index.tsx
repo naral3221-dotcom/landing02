@@ -8,6 +8,7 @@ import { Step2Age } from './steps/Step2Age';
 import { Step3ConcernSelection } from './steps/Step3Concern';
 import { Step4Question, Step4Data } from './steps/Step4Question';
 import { Step5Analysis } from './steps/Step5Analysis';
+import { generateAccessToken } from '../../utils/accessToken';
 
 /* ============================================================================
    AI MATCHING SYSTEM
@@ -121,15 +122,43 @@ export const AiMatchingSystem: React.FC = () => {
     handleScroll();
   };
 
-  // STEP 5 완료 -> Result Page로 이동 (옵션 3: 외부 서버)
+  // STEP 5 완료 -> DB 제출 -> Result Page로 이동
   const handleStep5Next = () => {
-    // 개발 환경: Result Page Design Overview 서버로 리다이렉트
-    // 배포 시: 동일 서버의 /result 경로로 변경
+    // AI 매칭 결과를 텍스트로 구성
+    const matchingContent = `
+[AI 매칭 결과]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+나이대: ${data.age}
+고민 태그: ${data.selectedTags.join(', ')}
+윤곽관리 경험: ${data.hasContouringExp ? '있음' : '없음'}
+우선순위: ${data.priority}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[상담 희망 시술]
+투명브이리프팅
+    `.trim();
+
+    // PHP form_update_tvlanding.php로 제출할 폼 생성 (투명브이 전용)
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://balancelab.kr/Landings/inc/form_update_tvlanding.php';
+
+    // 토큰 생성 (결과 페이지 접근용)
+    const token = generateAccessToken({
+      name: data.name,
+      age: data.age,
+      tags: data.selectedTags,
+      exp: data.hasContouringExp || false,
+      priority: data.priority
+    });
+
+    // 리다이렉트 URL 생성
     const resultBaseUrl = import.meta.env.DEV
       ? 'http://localhost:5173'
-      : '';  // 배포 시 빈 문자열 (같은 서버)
+      : `https://balancelab.kr/Landings/tvlanding01-1/result`;
 
     const params = new URLSearchParams({
+      token: encodeURIComponent(token),
       name: data.name,
       age: data.age,
       tags: data.selectedTags.join(','),
@@ -137,7 +166,35 @@ export const AiMatchingSystem: React.FC = () => {
       priority: data.priority,
     });
 
-    window.location.href = `${resultBaseUrl}/result?${params.toString()}`;
+    const resultUrl = `${resultBaseUrl}?${params.toString()}`;
+
+    const fields = {
+      bo_table: 'board3',
+      ca_name: '투명브이_META',
+      wr_subject: `[랜딩] 251219_투명브이_META`,
+      wr_name: data.name,
+      wr_7: data.phone,
+      wr_content: matchingContent,
+      wr_3: document.referrer || '',
+      wr_5: '투명브이리프팅',
+      wr_10: '251219_투명브이_META',
+      completekey: String(Math.floor(Date.now() / 1000)),
+      targetName: data.name,
+      // 결과 페이지로 리다이렉트 설정
+      redirect_to_result: 'true',
+      result_url: resultUrl
+    };
+
+    Object.entries(fields).forEach(([key, value]) => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = value;
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
   };
 
   /* ========== Render ========== */
